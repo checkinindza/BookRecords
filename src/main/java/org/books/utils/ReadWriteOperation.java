@@ -43,7 +43,7 @@ public class ReadWriteOperation {
         }
     }
 
-    private static List<User> readUsersFromFile() {
+/*    private static List<User> readUsersFromFile() {
         ArrayList<User> users = new ArrayList<>();
         try (Scanner scanner = new Scanner(new File("users.txt"));) {
             while (scanner.hasNext()) {
@@ -60,5 +60,5 @@ public class ReadWriteOperation {
         }
 
         return users;
-    }
+    }*/
 }

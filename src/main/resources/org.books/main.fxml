@@ -1,14 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="org.books.fxControllers.Main"
-            prefHeight="400.0" prefWidth="600.0">
 
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.books.fxControllers.Main">
+   <children>
+      <TabPane layoutX="-3.0" layoutY="-3.0" prefHeight="410.0" prefWidth="606.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab text="User">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <ListView fx:id="userListField" layoutX="26.0" layoutY="24.0" prefHeight="332.0" prefWidth="200.0" />
+                        <TextField fx:id="loginField" layoutX="245.0" layoutY="34.0" prefHeight="26.0" prefWidth="345.0" />
+                        <RadioButton fx:id="adminChk" layoutX="446.0" layoutY="233.0" mnemonicParsing="false" text="Admin">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="ClientSelectionGroup" />
+                           </toggleGroup>
+                        </RadioButton>
+                        <RadioButton fx:id="clientChk" layoutX="519.0" layoutY="233.0" mnemonicParsing="false" text="Client" toggleGroup="$ClientSelectionGroup" />
+                        <TextField fx:id="nameField" layoutX="245.0" layoutY="75.0" />
+                        <PasswordField fx:id="pswField" layoutX="429.0" layoutY="75.0" />
+                        <TextField fx:id="surnameField" layoutX="245.0" layoutY="116.0" />
+                        <TextField fx:id="addressField" layoutX="429.0" layoutY="116.0" />
+                        <DatePicker fx:id="bDate" layoutX="246.0" layoutY="157.0" prefHeight="26.0" prefWidth="161.0" />
+                        <Button layoutX="305.0" layoutY="321.0" mnemonicParsing="false" onAction="#createNewUser" text="Add" />
+                        <TextField fx:id="phoneNum" layoutX="429.0" layoutY="157.0" />
+                        <Button layoutX="358.0" layoutY="321.0" mnemonicParsing="false" onAction="#deleteUser" text="Delete" />
+                        <Button layoutX="429.0" layoutY="321.0" mnemonicParsing="false" text="Update" />
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+          <Tab text="Untitled Tab 2">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+            </content>
+          </Tab>
+        </tabs>
+      </TabPane>
+   </children>
 </AnchorPane>

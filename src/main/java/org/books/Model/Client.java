@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -18,6 +19,7 @@ import java.util.List;
 @Entity
 
 public class Client extends User implements Comparable<User> {
+    private LocalDate birthDate;
     private String email;
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
     private List<Comment> commentList;
@@ -27,9 +29,10 @@ public class Client extends User implements Comparable<User> {
     private List<Publication> borrowedPublications;
     // daugiau jeigu reikia
 
-    public Client(String login, String password, String name, String surname, String email) {
+    public Client(String login, String password, String name, String surname, String email, LocalDate birthDate) {
         super(login, password, name, surname);
         this.email = email;
+        this.birthDate = birthDate;
     }
 
     @Override

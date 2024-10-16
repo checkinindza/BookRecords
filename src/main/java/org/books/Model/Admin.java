@@ -13,14 +13,14 @@ import lombok.Setter;
 @Entity
 
 public class Admin extends User {
-    private int phoneNum;
+    private String phoneNum;
 
-    public Admin(int id, String login, String password, String name, String surname, int phoneNum) {
+    public Admin(int id, String login, String password, String name, String surname, String phoneNum) {
         super(id, login, password, name, surname);
         this.phoneNum = phoneNum;
     }
 
-    public Admin(String login, String password, String name, String surname, int phoneNum) {
+    public Admin(String login, String password, String name, String surname, String phoneNum) {
         super(login, password, name, surname);
         this.phoneNum = phoneNum;
     }

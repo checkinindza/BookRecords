@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 public class MenuOperation {
     public static void generateUserMenu(Scanner scanner, BookExchange bookExchange) {
-        int userCmd = 0;
+        /*int userCmd = 0;
         String consoleInput = "";
         while (userCmd != 6) {
             System.out.println("""
@@ -66,6 +66,6 @@ public class MenuOperation {
                 default:
                     System.out.println("Learn to read");
             }
-        }
+        }*/
     }
 }

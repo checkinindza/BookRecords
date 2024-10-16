@@ -22,8 +22,6 @@ public abstract class User {
     protected String name;
     protected String surname;
 
-    // Jei reikia daugiau bendru pozymiu, pridedu
-
     public User(String login, String password, String name, String surname) {
         this.login = login;
         this.password = password;
