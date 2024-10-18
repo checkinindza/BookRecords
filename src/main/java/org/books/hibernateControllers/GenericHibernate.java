@@ -4,7 +4,8 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Query;
 import jakarta.persistence.criteria.CriteriaQuery;
-import org.books.Model.Client;
+import javafx.scene.control.Alert;
+import org.books.utils.FxUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +26,7 @@ public class GenericHibernate {
             entityManager.getTransaction().commit();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            FxUtils.generateAlertWithoutHeader(Alert.AlertType.ERROR, "Error", "Error during CREATE operation");
         } finally {
             if (entityManager != null) entityManager.close();
         }
@@ -86,6 +87,7 @@ public class GenericHibernate {
             T entity = entityManager.find(entityClass, id);
             entityManager.remove(entity);
             entityManager.getTransaction().commit();
+            FxUtils.generateAlertWithoutHeader(Alert.AlertType.INFORMATION, "Success", "User deleted successfully");
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

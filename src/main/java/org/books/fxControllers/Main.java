@@ -58,14 +58,18 @@ public class Main implements Initializable {
     GenericHibernate hibernate = new GenericHibernate(entityManagerFactory);
 
     public void createNewUser() {
-        if (clientChk.isSelected()) {
-            Client client = new Client(loginField.getText(), pswField.getText(), nameField.getText(), surnameField.getText(), emailField.getText(), bDate.getValue(), addressField.getText());
-            hibernate.create(client);
+        if (!isInputValid()) {
+            return;
         } else {
-            Admin admin = new Admin(loginField.getText(), pswField.getText(), nameField.getText(), surnameField.getText(), emailField.getText(), phoneNum.getText());
-            hibernate.create(admin);
+            if (clientChk.isSelected()) {
+                Client client = new Client(loginField.getText(), pswField.getText(), nameField.getText(), surnameField.getText(), emailField.getText(), bDate.getValue(), addressField.getText());
+                hibernate.create(client);
+            } else {
+                Admin admin = new Admin(loginField.getText(), pswField.getText(), nameField.getText(), surnameField.getText(), emailField.getText(), phoneNum.getText());
+                hibernate.create(admin);
+            }
+            fillUserTable();
         }
-        fillUserTable();
     }
 
     public void disableFields() {
@@ -115,29 +119,33 @@ public class Main implements Initializable {
 
     public void updateUser() {
         selectedUser = userListField.getSelectionModel().getSelectedItem();
-        if (!isInputValid()) {
+        if (checkIfUserSelected()) {
             return;
         } else {
-            invalidInputLabel.setDisable(false);
-            if (selectedUser instanceof Client) {
-                Client client = hibernate.getEntityById(Client.class, selectedUser.getId());
-                client.setName(nameField.getText());
-                client.setLogin(loginField.getText());
-                client.setSurname(surnameField.getText());
-                client.setAddress(addressField.getText());
-                client.setBirthDate(bDate.getValue());
-                client.setPassword(pswField.getText());
-                client.setEmail(emailField.getText());
-                hibernate.update(client);
+            if (!isInputValid()) {
+                return;
             } else {
-                Admin admin = hibernate.getEntityById(Admin.class, selectedUser.getId());
-                admin.setName(nameField.getText());
-                admin.setSurname(surnameField.getText());
-                admin.setLogin(loginField.getText());
-                admin.setPassword(pswField.getText());
-                admin.setPhone(phoneNum.getText());
-                admin.setEmail(emailField.getText());
-                hibernate.update(admin);
+                invalidInputLabel.setDisable(false);
+                if (selectedUser instanceof Client) {
+                    Client client = hibernate.getEntityById(Client.class, selectedUser.getId());
+                    client.setName(nameField.getText());
+                    client.setLogin(loginField.getText());
+                    client.setSurname(surnameField.getText());
+                    client.setAddress(addressField.getText());
+                    client.setBirthDate(bDate.getValue());
+                    client.setPassword(pswField.getText());
+                    client.setEmail(emailField.getText());
+                    hibernate.update(client);
+                } else {
+                    Admin admin = hibernate.getEntityById(Admin.class, selectedUser.getId());
+                    admin.setName(nameField.getText());
+                    admin.setSurname(surnameField.getText());
+                    admin.setLogin(loginField.getText());
+                    admin.setPassword(pswField.getText());
+                    admin.setPhone(phoneNum.getText());
+                    admin.setEmail(emailField.getText());
+                    hibernate.update(admin);
+                }
             }
         }
     }
@@ -149,21 +157,16 @@ public class Main implements Initializable {
 
     public void deleteUser() {
         selectedUser = userListField.getSelectionModel().getSelectedItem();
-        hibernate.delete(User.class, selectedUser.getId());
-        fillUserTable();
+        if (!checkIfUserSelected()) {
+            return;
+        } else {
+            hibernate.delete(User.class, selectedUser.getId());
+            fillUserTable();
+        }
     }
 
     private boolean isInputValid() {
         boolean isValid = true;
-
-        // Check if user is selected
-        if (selectedUser == null) {
-            isValid = false;
-            noSelectionLabel.setVisible(true);
-            return isValid;
-        } else {
-            noSelectionLabel.setVisible(false);
-        }
 
         // Check email field
         Pattern emailPattern = Pattern.compile("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-z]{2,}");
@@ -203,6 +206,18 @@ public class Main implements Initializable {
         }
 
         return isValid;
+    }
+
+    public boolean checkIfUserSelected() {
+        boolean userSelected = true;
+        if (selectedUser == null) {
+            userSelected = false;
+            noSelectionLabel.setVisible(true);
+            return userSelected;
+        } else {
+            noSelectionLabel.setVisible(false);
+        }
+        return userSelected;
     }
 
     public boolean areAllFieldsNotEmpty() {
