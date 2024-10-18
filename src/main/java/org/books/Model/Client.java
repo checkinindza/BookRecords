@@ -19,8 +19,8 @@ import java.util.List;
 @Entity
 
 public class Client extends User implements Comparable<User> {
+    private String address;
     private LocalDate birthDate;
-    private String email;
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
     private List<Comment> commentList;
     @Transient
@@ -29,15 +29,19 @@ public class Client extends User implements Comparable<User> {
     private List<Publication> borrowedPublications;
     // daugiau jeigu reikia
 
-    public Client(String login, String password, String name, String surname, String email, LocalDate birthDate) {
-        super(login, password, name, surname);
-        this.email = email;
+    public Client(String login, String password, String name, String surname, String email, String address, LocalDate birthDate, List<Comment> commentList, List<Publication> ownedPublications, List<Publication> borrowedPublications) {
+        super(login, password, name, surname, email);
+        this.address = address;
         this.birthDate = birthDate;
+        this.commentList = commentList;
+        this.ownedPublications = ownedPublications;
+        this.borrowedPublications = borrowedPublications;
     }
 
-    @Override
-    public String toString() {
-        return name + " " + surname;
+    public Client(String login, String password, String name, String surname, String email, LocalDate birthDate, String address) {
+        super(login, password, name, surname, email);
+        this.address = address;
+        this.birthDate = birthDate;
     }
 
     @Override

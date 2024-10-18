@@ -21,11 +21,18 @@ public abstract class User {
     protected String password;
     protected String name;
     protected String surname;
+    protected String email;
 
-    public User(String login, String password, String name, String surname) {
+    public User(String login, String password, String name, String surname, String email) {
         this.login = login;
         this.password = password;
         this.name = name;
         this.surname = surname;
+        this.email = email;
+    }
+
+    @Override
+    public String toString() {
+        return this.name + " " + this.surname;
     }
 }
