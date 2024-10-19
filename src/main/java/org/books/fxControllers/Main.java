@@ -10,6 +10,7 @@ import org.books.Model.Admin;
 import org.books.Model.Client;
 import org.books.Model.User;
 import org.books.hibernateControllers.GenericHibernate;
+import org.books.utils.FxUtils;
 
 import java.net.URL;
 import java.util.List;
@@ -68,6 +69,7 @@ public class Main implements Initializable {
                 Admin admin = new Admin(loginField.getText(), pswField.getText(), nameField.getText(), surnameField.getText(), emailField.getText(), phoneNum.getText());
                 hibernate.create(admin);
             }
+            FxUtils.generateAlertWithoutHeader(Alert.AlertType.INFORMATION, "Success", "User created successfully");
             fillUserTable();
         }
     }
@@ -161,6 +163,7 @@ public class Main implements Initializable {
             return;
         } else {
             hibernate.delete(User.class, selectedUser.getId());
+            FxUtils.generateAlertWithoutHeader(Alert.AlertType.INFORMATION, "Success", "User deleted successfully");
             fillUserTable();
         }
     }

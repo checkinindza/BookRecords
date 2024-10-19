@@ -3,7 +3,9 @@ package org.books.hibernateControllers;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Query;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 import javafx.scene.control.Alert;
 import org.books.utils.FxUtils;
 
@@ -24,7 +26,6 @@ public class GenericHibernate {
             entityManager.getTransaction().begin();
             entityManager.persist(entity);
             entityManager.getTransaction().commit();
-
         } catch (Exception e) {
             FxUtils.generateAlertWithoutHeader(Alert.AlertType.ERROR, "Error", "Error during CREATE operation");
         } finally {
@@ -40,7 +41,7 @@ public class GenericHibernate {
             entityManager.getTransaction().commit();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            FxUtils.generateAlertWithoutHeader(Alert.AlertType.ERROR, "Error", "Error during UPDATE operation");
         } finally {
             if (entityManager != null) entityManager.close();
         }
@@ -87,11 +88,29 @@ public class GenericHibernate {
             T entity = entityManager.find(entityClass, id);
             entityManager.remove(entity);
             entityManager.getTransaction().commit();
-            FxUtils.generateAlertWithoutHeader(Alert.AlertType.INFORMATION, "Success", "User deleted successfully");
+        } catch (Exception e) {
+            FxUtils.generateAlertWithoutHeader(Alert.AlertType.ERROR, "Error", "Error during DELETE operation");
+        } finally {
+            if (entityManager != null) entityManager.close();
+        }
+    }
+
+    public <T> T getEntityByCriteria(Class<T> entityClass, String criteria, String compareTo) {
+        T result = null;
+        try {
+            entityManager = entityManagerFactory.createEntityManager();
+            entityManager.getTransaction().begin();
+            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+            CriteriaQuery<T> cq = cb.createQuery(entityClass);
+            Root<T> rootEntry = cq.from(entityClass);
+            cq.where(cb.equal(rootEntry.get(criteria), compareTo));
+            result = entityManager.createQuery(cq).getSingleResult();
+            entityManager.getTransaction().commit();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             if (entityManager != null) entityManager.close();
         }
+        return result;
     }
 }
