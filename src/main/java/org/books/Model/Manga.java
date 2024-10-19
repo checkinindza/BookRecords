@@ -7,6 +7,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.books.Model.enums.Demographic;
+import org.books.Model.enums.Language;
+import org.books.Model.enums.MangaGenre;
+
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -20,23 +24,17 @@ public class Manga extends Publication {
     private int volumeNumber;
     @Enumerated
     private Demographic demographic;
+    @Enumerated
+    private MangaGenre mangaGenre;
     private boolean isColor;
 
-    public Manga(int id, String title, int jan, String illustrator, int volumeNumber, Demographic demographic, boolean isColor) {
-        super(id, title);
+    public Manga(String title, Language language, LocalDate publicationDate, int pageCount, String publisher, String author, int jan, String illustrator, int volumeNumber, Demographic demographic, MangaGenre mangaGenre, boolean isColor) {
+        super(title, language, publicationDate, pageCount, publisher, author);
         this.jan = jan;
         this.illustrator = illustrator;
         this.volumeNumber = volumeNumber;
         this.demographic = demographic;
-        this.isColor = isColor;
-    }
-
-    public Manga(String title, int jan, String illustrator, int volumeNumber, Demographic demographic, boolean isColor) {
-        super(title);
-        this.jan = jan;
-        this.illustrator = illustrator;
-        this.volumeNumber = volumeNumber;
-        this.demographic = demographic;
+        this.mangaGenre = mangaGenre;
         this.isColor = isColor;
     }
 }

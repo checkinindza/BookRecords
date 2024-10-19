@@ -27,7 +27,6 @@ public class Client extends User implements Comparable<User> {
     private List<Publication> ownedPublications;
     @Transient
     private List<Publication> borrowedPublications;
-    // daugiau jeigu reikia
 
     public Client(String login, String password, String name, String surname, String email, String address, LocalDate birthDate, List<Comment> commentList, List<Publication> ownedPublications, List<Publication> borrowedPublications) {
         super(login, password, name, surname, email);

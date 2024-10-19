@@ -1,13 +1,11 @@
 package org.books.Model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.books.Model.enums.Language;
 
 import java.time.LocalDate;
 
@@ -22,8 +20,19 @@ public abstract class Publication {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String title;
+    @Enumerated
+    private Language language;
+    private LocalDate publicationDate;
+    private int pageCount;
+    private String publisher;
+    private String author;
 
-    public Publication(String title) {
+    public Publication(String title, Language language, LocalDate publicationDate, int pageCount, String publisher, String author) {
         this.title = title;
+        this.language = language;
+        this.publicationDate = publicationDate;
+        this.pageCount = pageCount;
+        this.publisher = publisher;
+        this.author = author;
     }
 }

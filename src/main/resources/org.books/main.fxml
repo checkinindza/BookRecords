@@ -71,9 +71,22 @@
                   </AnchorPane>
             </content>
           </Tab>
-          <Tab text="Untitled Tab 2">
+          <Tab text="Publications">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <ListView fx:id="userListField1" layoutX="26.0" layoutY="24.0" onMouseClicked="#loadUserData" prefHeight="417.0" prefWidth="200.0" />
+                        <TextField fx:id="loginField1" layoutX="242.0" layoutY="74.0" prefHeight="29.0" prefWidth="169.0" promptText="Enter login" />
+                        <TextField fx:id="nameField1" layoutX="242.0" layoutY="128.0" prefHeight="29.0" prefWidth="169.0" promptText="Enter name" />
+                        <TextField fx:id="surnameField1" layoutX="242.0" layoutY="181.0" prefHeight="29.0" prefWidth="169.0" promptText="Enter surname" />
+                        <TextField fx:id="addressField1" layoutX="429.0" layoutY="74.0" prefHeight="29.0" prefWidth="168.0" promptText="Enter address" />
+                        <DatePicker fx:id="bDate1" layoutX="429.0" layoutY="234.0" prefHeight="29.0" prefWidth="168.0" promptText="Enter birth date" />
+                        <Button layoutX="297.0" layoutY="404.0" mnemonicParsing="false" onAction="#createNewUser" text="Add" />
+                        <TextField fx:id="phoneNum1" layoutX="429.0" layoutY="128.0" prefHeight="29.0" prefWidth="168.0" promptText="Enter phone number" />
+                        <Button layoutX="723.0" layoutY="404.0" mnemonicParsing="false" onAction="#deleteUser" text="Delete" />
+                        <Button layoutX="509.0" layoutY="404.0" mnemonicParsing="false" onAction="#updateUser" text="Update" />
+                        <TextField fx:id="emailField1" layoutX="429.0" layoutY="181.0" prefHeight="29.0" prefWidth="168.0" promptText="Enter email" />
+                     </children></AnchorPane>
             </content>
           </Tab>
         </tabs>

@@ -1,4 +1,5 @@
 package org.books.Model.enums;
 
-public enum Genre {
+public enum BookGenre {
+
 }
