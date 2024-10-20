@@ -24,8 +24,8 @@ public class Periodical extends Publication {
     @Enumerated
     private Frequency frequency;
 
-    public Periodical(String title, Language language, LocalDate publicationDate, int pageCount, String publisher, String author, int issn, int issueNumber, String editor, Frequency frequency) {
-        super(title, language, publicationDate, pageCount, publisher, author);
+    public Periodical(String title, Language language, LocalDate publicationDate, int pageCount, String publisher, String author, String summary, int issn, int issueNumber, String editor, Frequency frequency) {
+        super(title, language, publicationDate, pageCount, publisher, author, summary);
         this.issn = issn;
         this.issueNumber = issueNumber;
         this.editor = editor;

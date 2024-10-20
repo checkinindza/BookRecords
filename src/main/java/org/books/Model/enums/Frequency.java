@@ -16,5 +16,11 @@ public enum Frequency {
     EVERY_TWO_WEEKS,
     EVERY_WEEK,
     TWICE_PER_WEEK,
-    ONCE_PER_BUSINESS_DAY
+    ONCE_PER_BUSINESS_DAY;
+
+    @Override
+    public String toString() {
+        String name = name().toLowerCase();
+        return Character.toUpperCase(name.charAt(0)) + name.substring(1).replace("_", " ");
+    }
 }

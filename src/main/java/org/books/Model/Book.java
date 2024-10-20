@@ -25,14 +25,12 @@ public class Book extends Publication {
     private int publicationYear;
     @Enumerated
     private Format format;
-    private String Summary;
 
-    public Book(String title, Language language, LocalDate publicationDate, int pageCount, String publisher, String author, String isbn, BookGenre bookGenre, int publicationYear, Format format, String summary) {
-        super(title, language, publicationDate, pageCount, publisher, author);
+    public Book(String title, Language language, LocalDate publicationDate, int pageCount, String publisher, String author, String summary, String isbn, BookGenre bookGenre, int publicationYear, Format format) {
+        super(title, language, publicationDate, pageCount, publisher, author, summary);
         this.isbn = isbn;
         this.bookGenre = bookGenre;
         this.publicationYear = publicationYear;
         this.format = format;
-        Summary = summary;
     }
 }

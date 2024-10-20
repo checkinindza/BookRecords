@@ -1,23 +1,30 @@
 package org.books.fxControllers;
 
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import org.books.Model.Admin;
 import org.books.Model.Client;
+import org.books.Model.Publication;
 import org.books.Model.User;
+import org.books.StartGUI;
 import org.books.hibernateControllers.GenericHibernate;
 import org.books.utils.FxUtils;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
 public class Main implements Initializable {
+    // JAVA FX ELEMENTS
+
     @FXML
     public ListView<User> userListField;
     @FXML
@@ -52,11 +59,23 @@ public class Main implements Initializable {
     public Label bDateFieldCheck;
     @FXML
     public AnchorPane usersManagePane;
+    @FXML
+    public AnchorPane publicationsPane;
+    @FXML
+    public ListView<Object> publicationsListField;
+    @FXML
+    public ComboBox<String> publicationTypeComboBox;
+    @FXML
+    public Label typeNotSelectedWarningLabel;
+
+    // END OF JAVA FX ELEMENTS
 
     private User selectedUser = null;
 
     EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("coursework-shop");
     GenericHibernate hibernate = new GenericHibernate(entityManagerFactory);
+
+    // USER TAB
 
     public void createNewUser() {
         if (!isInputValid()) {
@@ -155,6 +174,7 @@ public class Main implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         fillUserTable();
+        fillDTypeComboBox();
     }
 
     public void deleteUser() {
@@ -229,4 +249,33 @@ public class Main implements Initializable {
                 .map(node -> (TextInputControl) node)
                 .allMatch(field -> !field.getText().isEmpty());
     }
+
+    // END OF USER TAB
+
+    // PUBLICATION TAB
+
+    public void fillPublicationsTable() {
+        publicationsListField.getItems().clear();
+        List<?> publicationList = hibernate.getRecordsByCriteria(Publication.class, "dtype", publicationTypeComboBox.getValue());
+        publicationsListField.getItems().addAll(publicationList);
+    }
+
+    public void fillDTypeComboBox() {
+        publicationTypeComboBox.getItems().addAll(FxUtils.getChildren(Publication.class));
+    }
+
+    public void openAddWindow() throws IOException {
+        if (!publicationTypeComboBox.getSelectionModel().isEmpty()) {
+            typeNotSelectedWarningLabel.setVisible(false);
+            ButtonPressInfo info = ButtonPressInfo.getInstace();
+            info.setAddWasPressed(true);
+            info.setText(publicationTypeComboBox.getValue());
+            StartGUI.newStage("/org.books/productInfo.fxml");
+            fillPublicationsTable();
+        } else {
+            typeNotSelectedWarningLabel.setVisible(true);
+        }
+    }
+
+    // END OF PUBLICATION TAB
 }

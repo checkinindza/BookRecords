@@ -28,8 +28,8 @@ public class Manga extends Publication {
     private MangaGenre mangaGenre;
     private boolean isColor;
 
-    public Manga(String title, Language language, LocalDate publicationDate, int pageCount, String publisher, String author, int jan, String illustrator, int volumeNumber, Demographic demographic, MangaGenre mangaGenre, boolean isColor) {
-        super(title, language, publicationDate, pageCount, publisher, author);
+    public Manga(String title, Language language, LocalDate publicationDate, int pageCount, String publisher, String author, String summary, int jan, String illustrator, int volumeNumber, Demographic demographic, MangaGenre mangaGenre, boolean isColor) {
+        super(title, language, publicationDate, pageCount, publisher, author, summary);
         this.jan = jan;
         this.illustrator = illustrator;
         this.volumeNumber = volumeNumber;

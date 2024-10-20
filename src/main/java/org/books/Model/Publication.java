@@ -26,13 +26,17 @@ public abstract class Publication {
     private int pageCount;
     private String publisher;
     private String author;
+    private String summary;
+    @Column(insertable = false, updatable = false)
+    private String dtype;
 
-    public Publication(String title, Language language, LocalDate publicationDate, int pageCount, String publisher, String author) {
+    public Publication(String title, Language language, LocalDate publicationDate, int pageCount, String publisher, String author, String summary) {
         this.title = title;
         this.language = language;
         this.publicationDate = publicationDate;
         this.pageCount = pageCount;
         this.publisher = publisher;
         this.author = author;
+        this.summary = summary;
     }
 }

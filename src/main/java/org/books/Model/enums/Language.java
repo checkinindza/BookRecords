@@ -7,5 +7,11 @@ public enum Language {
     JAPANESE,
     KOREAN,
     CHINESE,
-    LITHUANIAN
+    LITHUANIAN;
+
+    @Override
+    public String toString() {
+        String name = name().toLowerCase();
+        return Character.toUpperCase(name.charAt(0)) + name.substring(1).replace("_", " ");
+    }
 }

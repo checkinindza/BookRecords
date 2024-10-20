@@ -113,4 +113,24 @@ public class GenericHibernate {
         }
         return result;
     }
+
+    public <T> List<T> getRecordsByCriteria(Class<T> entityClass, String criteria, String compareTo) {
+        List<T> list = new ArrayList<>();
+        try {
+            entityManager = entityManagerFactory.createEntityManager();
+            entityManager.getTransaction().begin();
+            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+            CriteriaQuery<T> cq = cb.createQuery(entityClass);
+            Root<T> rootEntry = cq.from(entityClass);
+            cq.where(cb.equal(rootEntry.get(criteria), compareTo));
+            Query q = entityManager.createQuery(cq);
+            list = q.getResultList();
+            entityManager.getTransaction().commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (entityManager != null) entityManager.close();
+        }
+        return list;
+    }
 }
