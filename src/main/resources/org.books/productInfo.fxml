@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="productInfoPane" prefHeight="638.0" prefWidth="781.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.books.fxControllers.ProductInfo">
+<AnchorPane fx:id="productInfoPane" prefHeight="699.0" prefWidth="781.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.books.fxControllers.ProductInfo">
    <children>
       <Label fx:id="itemNameLabel" layoutX="237.0" layoutY="35.0" text="Editing: " visible="false" />
       <Label fx:id="addPublicationLabel" contentDisplay="BOTTOM" layoutX="62.0" layoutY="25.0" prefHeight="21.0" prefWidth="152.0" text="New Publication:" textAlignment="JUSTIFY">
@@ -21,9 +21,9 @@
       <TextField fx:id="titleField" layoutX="61.0" layoutY="146.0" prefHeight="24.0" prefWidth="200.0" promptText="Enter title..." />
       <DatePicker fx:id="datePicker" layoutX="62.0" layoutY="270.0" prefHeight="24.0" prefWidth="200.0" promptText="Choose publication date..." />
       <Spinner fx:id="pageCountSpinner" editable="true" layoutX="62.0" layoutY="331.0" prefHeight="24.0" prefWidth="200.0" />
-      <TextField layoutX="299.0" layoutY="146.0" prefHeight="24.0" prefWidth="200.0" promptText="Enter publisher..." />
-      <TextField layoutX="299.0" layoutY="84.0" prefHeight="24.0" prefWidth="200.0" promptText="Enter author..." />
-      <TextArea fx:id="summaryField" layoutX="61.0" layoutY="392.0" prefHeight="177.0" prefWidth="659.0" promptText="Enter summary..." />
+      <TextField fx:id="publisherField" layoutX="299.0" layoutY="146.0" prefHeight="24.0" prefWidth="200.0" promptText="Enter publisher..." />
+      <TextField fx:id="authorField" layoutX="299.0" layoutY="84.0" prefHeight="24.0" prefWidth="200.0" promptText="Enter author..." />
+      <TextArea fx:id="summaryField" layoutX="61.0" layoutY="453.0" prefHeight="177.0" prefWidth="659.0" promptText="Enter summary..." />
       <TextField fx:id="identificationNumberField" layoutX="62.0" layoutY="84.0" prefHeight="24.0" prefWidth="200.0" promptText="Enter identification number..." />
       <ComboBox fx:id="languageComboBox" layoutX="62.0" layoutY="208.0" prefHeight="24.0" prefWidth="200.0" promptText="Choose language..." />
       <ComboBox fx:id="formatComboBox" layoutX="299.0" layoutY="208.0" prefHeight="24.0" prefWidth="200.0" promptText="Choose format..." />
@@ -58,8 +58,15 @@
          </font>
       </Label>
       <Button layoutX="522.0" layoutY="270.0" mnemonicParsing="false" onAction="#openGenreChooser" prefHeight="24.0" prefWidth="200.0" text="Choose genre..." />
-      <Button layoutX="243.0" layoutY="589.0" mnemonicParsing="false" onAction="#createNewPublication" text="OK" />
-      <Button layoutX="480.0" layoutY="589.0" mnemonicParsing="false" onAction="#exitProductInfo" text="Close" />
+      <Button layoutX="243.0" layoutY="652.0" mnemonicParsing="false" onAction="#createNewPublication" text="OK" />
+      <Button layoutX="480.0" layoutY="652.0" mnemonicParsing="false" onAction="#exitProductInfo" text="Close" />
       <TextField fx:id="volumeNumberField" layoutX="522.0" layoutY="331.0" prefHeight="24.0" prefWidth="200.0" promptText="Enter volume number..." />
+      <TextField fx:id="illustratorField" layoutX="62.0" layoutY="392.0" prefHeight="24.0" prefWidth="200.0" promptText="Enter illustrator..." />
+      <Label layoutX="64.0" layoutY="371.0" text="Illustrator">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label layoutX="363.0" layoutY="422.0" text="Summary" />
    </children>
 </AnchorPane>

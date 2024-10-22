@@ -2,8 +2,9 @@ package org.books.Model.enums;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import org.books.Interfaces.HasSelectedProperty;
 
-public enum MangaGenre {
+public enum MangaGenre implements HasSelectedProperty {
     ACTION,
     ADVENTURE,
     COMEDY,
@@ -41,6 +42,17 @@ public enum MangaGenre {
     MECHA,
     LOLICON,
     SHOTACON;
+
+    private final BooleanProperty on = new SimpleBooleanProperty(false);
+
+    @Override
+    public BooleanProperty selectedProperty() {
+        return on;
+    }
+
+    public void setSelected() {
+        this.on.set(false);
+    }
 
     @Override
     public String toString() {

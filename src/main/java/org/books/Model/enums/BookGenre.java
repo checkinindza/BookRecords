@@ -2,8 +2,9 @@ package org.books.Model.enums;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import org.books.Interfaces.HasSelectedProperty;
 
-public enum BookGenre {
+public enum BookGenre implements HasSelectedProperty {
     FICTION,
     ACTION,
     ADVENTURE,
@@ -20,6 +21,17 @@ public enum BookGenre {
     GRAPHIC_NOVEL,
     HISTORICAL_FICTION,
     HORROR;
+
+    private final BooleanProperty on = new SimpleBooleanProperty(false);
+
+    @Override
+    public BooleanProperty selectedProperty() {
+        return on;
+    }
+
+    public void setSelected() {
+        this.on.set(false);
+    }
 
     @Override
     public String toString() {

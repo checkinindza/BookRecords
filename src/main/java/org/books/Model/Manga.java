@@ -1,9 +1,6 @@
 package org.books.Model;
 
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,10 +8,10 @@ import lombok.Setter;
 import org.books.Model.enums.Demographic;
 import org.books.Model.enums.Language;
 import org.books.Model.enums.MangaGenre;
+import org.books.utils.MangaGenreConverter;
 
 import java.time.LocalDate;
 import java.util.List;
-
 
 @Getter
 @Setter
@@ -28,8 +25,8 @@ public class Manga extends Publication {
     private int volumeNumber;
     @Enumerated
     private Demographic demographic;
-    @ElementCollection(targetClass = MangaGenre.class)
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = MangaGenreConverter.class)
+    @Column(name = "genres", nullable = false)
     private List<MangaGenre> mangaGenres;
     private boolean isColor;
 

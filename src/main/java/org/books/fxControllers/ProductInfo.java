@@ -16,11 +16,11 @@ import org.books.hibernateControllers.GenericHibernate;
 import org.books.utils.DataPopulator;
 import org.books.utils.DataTransfer;
 import org.books.utils.FxUtils;
+import org.books.utils.SelectedGenresHolder;
 
 import java.io.IOException;
 import java.net.URL;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -57,11 +57,18 @@ public class ProductInfo implements Initializable {
     public TextField volumeNumberField;
     @FXML
     public TextArea summaryField;
+    @FXML
+    public TextField publisherField;
+    @FXML
+    public TextField authorField;
+    @FXML
+    public TextField illustratorField;
 
     EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("coursework-shop");
     GenericHibernate hibernate = new GenericHibernate(entityManagerFactory);
     DataPopulator dataPopulator = new DataPopulator();
     DataTransfer dataTransfer = DataTransfer.getInstance();
+    SelectedGenresHolder selectedGenresHolder = SelectedGenresHolder.getInstance();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -102,17 +109,24 @@ public class ProductInfo implements Initializable {
         }
     }
 
+    public void BooleanPropertyReset() {
+        for (MangaGenre genre : MangaGenre.values()) {
+            genre.setSelected();
+        }
+    }
+
     public void createNewPublication(ActionEvent actionEvent) {
         if (isInputEmpty()) {
             return;
         }
 
         if (dataTransfer.getText().equals("Manga")) {
-            Manga manga = new Manga(titleField.getText(), languageComboBox.getValue(), datePicker.getValue(), pageCountSpinner.getValue(), editorField.getText(), identificationNumberField.getText(), "Summary", Integer.parseInt(identificationNumberField.getText()), "Illustrator", Integer.parseInt(volumeNumberField.getText()), demographicComboBox.getValue(), (List<MangaGenre>)dataTransfer.getList(), colorizedCheckBox.isSelected());
+            Manga manga = new Manga(titleField.getText(), languageComboBox.getValue(), datePicker.getValue(), pageCountSpinner.getValue(), editorField.getText(), identificationNumberField.getText(), summaryField.getText(), Integer.parseInt(identificationNumberField.getText()), illustratorField.getText(), Integer.parseInt(volumeNumberField.getText()), demographicComboBox.getValue(), (List<MangaGenre>) (List<?>) selectedGenresHolder.getSelectedGenres(), colorizedCheckBox.isSelected());
             hibernate.create(manga);
         }
 
         FxUtils.generateAlertWithoutHeader(Alert.AlertType.INFORMATION, "Success", "Publication created successfully");
+        BooleanPropertyReset();
         Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
         stage.close();
     }
@@ -147,9 +161,9 @@ public class ProductInfo implements Initializable {
             }
         }
 
-        if (dataTransfer.getList() == null) isEmpty = true;
+        if (selectedGenresHolder.getSelectedGenres().isEmpty()) isEmpty = true;
 
-        if (isEmpty) FxUtils.generateAlertWithoutHeader(Alert.AlertType.ERROR, "Error", "You missed something!");
+        if (isEmpty) FxUtils.generateAlertWithoutHeader(Alert.AlertType.ERROR, "You missed something!", "Error");
         return isEmpty;
     }
 

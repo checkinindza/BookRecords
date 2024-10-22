@@ -1,7 +1,6 @@
 package org.books.fxControllers;
 
 import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -10,24 +9,25 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxListCell;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import org.books.Interfaces.HasSelectedProperty;
 import org.books.Model.enums.BookGenre;
 import org.books.Model.enums.MangaGenre;
 import org.books.utils.DataPopulator;
 import org.books.utils.DataTransfer;
+import org.books.utils.SelectedGenresHolder;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 public class GenreChooser implements Initializable {
 
     @FXML
-    public ListView<MangaGenre> genreList;
+    public ListView genreList;
     @FXML
     public Label notSelectedLabel;
 
-    List<MangaGenre> selectedGenres = new ArrayList<>();
+    SelectedGenresHolder selectedGenresHolder = SelectedGenresHolder.getInstance();
+    DataTransfer dataTransfer = DataTransfer.getInstance();
     DataPopulator dataPopulator = new DataPopulator();
 
     @Override
@@ -35,25 +35,16 @@ public class GenreChooser implements Initializable {
         setupGenreList();
     }
 
-    public void fillGenreList() {
-        DataTransfer dataTransfer = DataTransfer.getInstance();
-        if (dataTransfer.getText().equals("Manga")) {
-            dataPopulator.fillTableWithEnums(genreList, MangaGenre.class);
-        } else if (dataTransfer.getText().equals("Book")) {
-            dataPopulator.fillTableWithEnums(genreList, BookGenre.class);
-        }
-    }
-
-    public void setListCellFactory() {
-        genreList.setCellFactory(CheckBoxListCell.forListView(new Callback<MangaGenre, ObservableValue<Boolean>>() {
+    public <E extends Enum<E> & HasSelectedProperty> void setListCellFactory(ListView<E> listView, Class <E> enumType) {
+        listView.setCellFactory(CheckBoxListCell.forListView(new Callback<E, ObservableValue<Boolean>>() {
             @Override
-            public ObservableValue<Boolean> call(MangaGenre item) {
-                BooleanProperty observable = new SimpleBooleanProperty();
+            public ObservableValue<Boolean> call(E item) {
+                BooleanProperty observable = item.selectedProperty();
                 observable.addListener((obs, wasSelected, isNowSelected) -> {
-                    if (isNowSelected) {
-                        selectedGenres.add(item);
+                    if (isNowSelected && !selectedGenresHolder.getSelectedGenres().contains(item)) {
+                        selectedGenresHolder.getSelectedGenres().add(item);
                     } else {
-                        selectedGenres.remove(item);
+                        selectedGenresHolder.getSelectedGenres().remove(item);
                     }
                 });
                 return observable;
@@ -63,17 +54,20 @@ public class GenreChooser implements Initializable {
 
 
     public void setupGenreList() {
-        fillGenreList();
-        setListCellFactory();
+        if (dataTransfer.getText().equals("Manga")) {
+            dataPopulator.fillTableWithEnums(genreList, MangaGenre.class);
+            setListCellFactory(genreList, MangaGenre.class);
+        } else if (dataTransfer.getText().equals("Book")) {
+            dataPopulator.fillTableWithEnums(genreList, BookGenre.class);
+            setListCellFactory(genreList, BookGenre.class);
+        }
     }
 
     public void sendInfo() {
-        DataTransfer dataTransfer = DataTransfer.getInstance();
-        if (selectedGenres.isEmpty()) {
+        if (selectedGenresHolder.getSelectedGenres().isEmpty()) {
             notSelectedLabel.setVisible(true);
         } else {
             notSelectedLabel.setVisible(false);
-            dataTransfer.setList(selectedGenres);
             Stage stage = (Stage) genreList.getScene().getWindow();
             stage.close();
         }

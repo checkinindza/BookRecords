@@ -1,9 +1,6 @@
 package org.books.Model;
 
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,6 +8,7 @@ import lombok.Setter;
 import org.books.Model.enums.Format;
 import org.books.Model.enums.BookGenre;
 import org.books.Model.enums.Language;
+import org.books.utils.BookGenreConverter;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -23,8 +21,9 @@ import java.util.List;
 
 public class Book extends Publication {
     private String isbn;
-    @ElementCollection(targetClass = BookGenre.class)
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = BookGenreConverter.class)
+    @Column(name = "genres", nullable = false)
+    @SuppressWarnings("JpaDataSourceORMInspection")
     private List<BookGenre> bookGenre;
     private int publicationYear;
     @Enumerated
