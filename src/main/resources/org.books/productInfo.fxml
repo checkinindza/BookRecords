@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
@@ -10,7 +11,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="607.0" prefWidth="781.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.books.fxControllers.ProductInfo">
+<AnchorPane fx:id="productInfoPane" prefHeight="638.0" prefWidth="781.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.books.fxControllers.ProductInfo">
    <children>
       <Label fx:id="itemNameLabel" layoutX="237.0" layoutY="35.0" text="Editing: " visible="false" />
       <Label fx:id="addPublicationLabel" contentDisplay="BOTTOM" layoutX="62.0" layoutY="25.0" prefHeight="21.0" prefWidth="152.0" text="New Publication:" textAlignment="JUSTIFY">
@@ -18,7 +19,7 @@
             <Font name="System Bold" size="18.0" />
          </font></Label>
       <TextField fx:id="titleField" layoutX="61.0" layoutY="146.0" prefHeight="24.0" prefWidth="200.0" promptText="Enter title..." />
-      <DatePicker layoutX="62.0" layoutY="270.0" prefHeight="24.0" prefWidth="200.0" promptText="Choose publication date..." />
+      <DatePicker fx:id="datePicker" layoutX="62.0" layoutY="270.0" prefHeight="24.0" prefWidth="200.0" promptText="Choose publication date..." />
       <Spinner fx:id="pageCountSpinner" editable="true" layoutX="62.0" layoutY="331.0" prefHeight="24.0" prefWidth="200.0" />
       <TextField layoutX="299.0" layoutY="146.0" prefHeight="24.0" prefWidth="200.0" promptText="Enter publisher..." />
       <TextField layoutX="299.0" layoutY="84.0" prefHeight="24.0" prefWidth="200.0" promptText="Enter author..." />
@@ -28,8 +29,8 @@
       <ComboBox fx:id="formatComboBox" layoutX="299.0" layoutY="208.0" prefHeight="24.0" prefWidth="200.0" promptText="Choose format..." />
       <ComboBox fx:id="demographicComboBox" layoutX="299.0" layoutY="270.0" prefHeight="24.0" prefWidth="200.0" promptText="Choose demographic..." />
       <CheckBox fx:id="colorizedCheckBox" layoutX="334.0" layoutY="331.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="114.0" text="Is it colorized?" />
-      <TextField layoutX="522.0" layoutY="84.0" prefHeight="24.0" prefWidth="200.0" promptText="Enter issue number..." />
-      <TextField layoutX="522.0" layoutY="146.0" prefHeight="24.0" prefWidth="200.0" promptText="Enter editor..." />
+      <TextField fx:id="issueNumberField" layoutX="522.0" layoutY="84.0" prefHeight="24.0" prefWidth="200.0" promptText="Enter issue number..." />
+      <TextField fx:id="editorField" layoutX="522.0" layoutY="146.0" prefHeight="24.0" prefWidth="200.0" promptText="Enter editor..." />
       <ComboBox fx:id="frequencyComboBox" layoutX="522.0" layoutY="208.0" prefHeight="24.0" prefWidth="200.0" promptText="Choose release frequency..." />
       <Label layoutX="62.0" layoutY="310.0" text="Page count">
          <font>
@@ -56,5 +57,9 @@
             <Font name="System Bold" size="13.0" />
          </font>
       </Label>
+      <Button layoutX="522.0" layoutY="270.0" mnemonicParsing="false" onAction="#openGenreChooser" prefHeight="24.0" prefWidth="200.0" text="Choose genre..." />
+      <Button fx:id="createNewPublication" layoutX="243.0" layoutY="589.0" mnemonicParsing="false" text="OK" />
+      <Button layoutX="480.0" layoutY="589.0" mnemonicParsing="false" onAction="#exitProductInfo" text="Close" />
+      <TextField fx:id="volumeNumberField" layoutX="522.0" layoutY="331.0" prefHeight="24.0" prefWidth="200.0" promptText="Enter volume number..." />
    </children>
 </AnchorPane>

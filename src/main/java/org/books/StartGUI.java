@@ -28,11 +28,11 @@ public class StartGUI extends Application {
         stage.show();
     }
 
-    public static void newStage(String fileName) throws IOException {
+    public static void newStage(String fileName, String title) throws IOException {
         Stage stage = new Stage();
         FXMLLoader fxmlLoader = new FXMLLoader(StartGUI.class.getResource(fileName));
         Scene scene = new Scene(fxmlLoader.load());
-        stage.setTitle("Product View");
+        stage.setTitle(title);
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setScene(scene);
         stage.showAndWait();

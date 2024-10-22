@@ -77,7 +77,7 @@
               <AnchorPane fx:id="publicationsPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
                         <ListView fx:id="publicationsListField" layoutX="33.0" layoutY="82.0" onMouseClicked="#loadUserData" prefHeight="349.0" prefWidth="800.0" />
-                        <ComboBox fx:id="publicationTypeComboBox" layoutX="435.0" layoutY="28.0" onAction="#fillPublicationsTable" prefWidth="150.0" />
+                        <ComboBox fx:id="publicationTypeComboBox" layoutX="435.0" layoutY="28.0" prefWidth="150.0" />
                         <Label layoutX="278.0" layoutY="32.0" text="Choose publication type:" />
                         <Button layoutX="247.0" layoutY="459.0" mnemonicParsing="false" onAction="#openAddWindow" text="Add" />
                         <Button layoutX="391.0" layoutY="459.0" mnemonicParsing="false" text="Update" />

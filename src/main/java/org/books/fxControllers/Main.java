@@ -1,9 +1,7 @@
 package org.books.fxControllers;
 
-import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -14,11 +12,12 @@ import org.books.Model.Publication;
 import org.books.Model.User;
 import org.books.StartGUI;
 import org.books.hibernateControllers.GenericHibernate;
+import org.books.utils.DataPopulator;
+import org.books.utils.DataTransfer;
 import org.books.utils.FxUtils;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
@@ -74,6 +73,13 @@ public class Main implements Initializable {
 
     EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("coursework-shop");
     GenericHibernate hibernate = new GenericHibernate(entityManagerFactory);
+    DataPopulator dataPopulator = new DataPopulator();
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        dataPopulator.fillTableWithAllRecords(userListField, User.class);
+        dataPopulator.fillComboBox(publicationTypeComboBox, dataPopulator.getChildren(Publication.class));
+    }
 
     // USER TAB
 
@@ -88,8 +94,8 @@ public class Main implements Initializable {
                 Admin admin = new Admin(loginField.getText(), pswField.getText(), nameField.getText(), surnameField.getText(), emailField.getText(), phoneNum.getText());
                 hibernate.create(admin);
             }
-            FxUtils.generateAlertWithoutHeader(Alert.AlertType.INFORMATION, "Success", "User created successfully");
-            fillUserTable();
+            FxUtils.generateAlertWithoutHeader(Alert.AlertType.INFORMATION, "SUCCESS", "User created successfully");
+            dataPopulator.fillTableWithAllRecords(userListField, User.class);
         }
     }
 
@@ -103,12 +109,6 @@ public class Main implements Initializable {
             bDate.setDisable(true);
             phoneNum.setDisable(false);
         }
-    }
-
-    public void fillUserTable() {
-        userListField.getItems().clear();
-        List<User> userList = hibernate.getAllRecords(User.class);
-        userListField.getItems().addAll(userList);
     }
 
     public void loadUserData() {
@@ -140,7 +140,7 @@ public class Main implements Initializable {
 
     public void updateUser() {
         selectedUser = userListField.getSelectionModel().getSelectedItem();
-        if (checkIfUserSelected()) {
+        if (!checkIfUserSelected()) {
             return;
         } else {
             if (!isInputValid()) {
@@ -169,12 +169,7 @@ public class Main implements Initializable {
                 }
             }
         }
-    }
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        fillUserTable();
-        fillDTypeComboBox();
+        FxUtils.generateAlertWithoutHeader(Alert.AlertType.INFORMATION, "Success", "User updated successfully");
     }
 
     public void deleteUser() {
@@ -184,7 +179,7 @@ public class Main implements Initializable {
         } else {
             hibernate.delete(User.class, selectedUser.getId());
             FxUtils.generateAlertWithoutHeader(Alert.AlertType.INFORMATION, "Success", "User deleted successfully");
-            fillUserTable();
+            dataPopulator.fillTableWithAllRecords(userListField, User.class);
         }
     }
 
@@ -221,7 +216,7 @@ public class Main implements Initializable {
             }
         }
         // Check if all fields are not empty
-        if (areAllFieldsNotEmpty() || !isValid) {
+        if (FxUtils.areAllFieldsNotEmpty(usersManagePane) || !isValid) {
             isValid = false;
             invalidInputLabel.setVisible(true);
         } else {
@@ -243,35 +238,18 @@ public class Main implements Initializable {
         return userSelected;
     }
 
-    public boolean areAllFieldsNotEmpty() {
-        return usersManagePane.getChildren().stream()
-                .filter(node -> node instanceof TextInputControl)
-                .map(node -> (TextInputControl) node)
-                .allMatch(field -> !field.getText().isEmpty());
-    }
-
     // END OF USER TAB
 
     // PUBLICATION TAB
 
-    public void fillPublicationsTable() {
-        publicationsListField.getItems().clear();
-        List<?> publicationList = hibernate.getRecordsByCriteria(Publication.class, "dtype", publicationTypeComboBox.getValue());
-        publicationsListField.getItems().addAll(publicationList);
-    }
-
-    public void fillDTypeComboBox() {
-        publicationTypeComboBox.getItems().addAll(FxUtils.getChildren(Publication.class));
-    }
-
     public void openAddWindow() throws IOException {
         if (!publicationTypeComboBox.getSelectionModel().isEmpty()) {
             typeNotSelectedWarningLabel.setVisible(false);
-            ButtonPressInfo info = ButtonPressInfo.getInstace();
+            DataTransfer info = DataTransfer.getInstance();
             info.setAddWasPressed(true);
             info.setText(publicationTypeComboBox.getValue());
-            StartGUI.newStage("/org.books/productInfo.fxml");
-            fillPublicationsTable();
+            StartGUI.newStage("/org.books/productInfo.fxml", "Product View");
+            dataPopulator.fillTableWithRecordsByCriteria(publicationsListField, Publication.class, "dtype", publicationTypeComboBox.getValue());
         } else {
             typeNotSelectedWarningLabel.setVisible(true);
         }

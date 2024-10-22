@@ -2,22 +2,27 @@ package org.books.fxControllers;
 
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
-import javafx.scene.Group;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
+import org.books.Model.Manga;
 import org.books.Model.enums.Demographic;
 import org.books.Model.enums.Format;
 import org.books.Model.enums.Frequency;
 import org.books.Model.enums.Language;
+import org.books.StartGUI;
 import org.books.hibernateControllers.GenericHibernate;
+import org.books.utils.DataPopulator;
+import org.books.utils.DataTransfer;
+import org.books.utils.FxUtils;
 
+import java.io.IOException;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.List;
+
 import java.util.ResourceBundle;
 
 public class ProductInfo implements Initializable {
@@ -41,18 +46,28 @@ public class ProductInfo implements Initializable {
     public CheckBox colorizedCheckBox;
     @FXML
     public ComboBox<Frequency> frequencyComboBox;
+    @FXML
+    public TextField issueNumberField;
+    @FXML
+    public TextField editorField;
+    @FXML
+    public AnchorPane productInfoPane;
+    @FXML
+    public DatePicker datePicker;
+    @FXML
+    public TextField volumeNumberField;
 
     EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("coursework-shop");
     GenericHibernate hibernate = new GenericHibernate(entityManagerFactory);
+    DataPopulator dataPopulator = new DataPopulator();
+    DataTransfer dataTransfer = DataTransfer.getInstance();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setAddPublicationLabel();
         setupSpinner();
-        setupComboBox(Language.class, languageComboBox);
-        setupComboBox(Format.class, formatComboBox);
-        setupComboBox(Demographic.class, demographicComboBox);
-        setupComboBox(Frequency.class, frequencyComboBox);
+        fillComboBoxes();
+        disableFields();
     }
 
     public void setupSpinner() {
@@ -69,30 +84,41 @@ public class ProductInfo implements Initializable {
         pageCountSpinner.getEditor().setTextFormatter(textFormatter);
     }
 
-    public <E extends Enum<E>> void setupComboBox(Class<E> enumType, ComboBox<E> comboBox) {
-        List<E> choices = Arrays.asList(enumType.getEnumConstants());
-        comboBox.getItems().addAll(choices);
+    public void fillComboBoxes() {
+        dataPopulator.fillComboBoxWithEnums(Language.class, languageComboBox);
+        dataPopulator.fillComboBoxWithEnums(Format.class, formatComboBox);
+        dataPopulator.fillComboBoxWithEnums(Demographic.class, demographicComboBox);
+        dataPopulator.fillComboBoxWithEnums(Frequency.class, frequencyComboBox);
     }
 
-    /*public void createNewPublication() {
-        if (!isInputValid()) {
-            return;
-        } else {
-            if (clientChk.isSelected()) {
-                Client client = new Client(loginField.getText(), pswField.getText(), nameField.getText(), surnameField.getText(), emailField.getText(), bDate.getValue(), addressField.getText());
-                hibernate.create(client);
-            } else {
-                Admin admin = new Admin(loginField.getText(), pswField.getText(), nameField.getText(), surnameField.getText(), emailField.getText(), phoneNum.getText());
-                hibernate.create(admin);
-            }
-            FxUtils.generateAlertWithoutHeader(Alert.AlertType.INFORMATION, "Success", "User created successfully");
+    public void disableFields() {
+        if (dataTransfer.getText().equals("Manga")) {
+            issueNumberField.setDisable(true);
+            editorField.setDisable(true);
+            formatComboBox.setDisable(true);
+            frequencyComboBox.setDisable(true);
         }
-    }*/
+    }
+
+    public void createNewPublication(ActionEvent actionEvent) {
+        if (!isInputEmpty()) {
+            return;
+        }
+
+        if (dataTransfer.getText().equals("Manga")) {
+            Manga manga = new Manga(titleField.getText(), languageComboBox.getValue(), datePicker.getValue(), pageCountSpinner.getValue(), editorField.getText(), identificationNumberField.getText(), "Summary", Integer.parseInt(identificationNumberField.getText()), "Illustrator", Integer.parseInt(volumeNumberField.getText()), demographicComboBox.getValue(), null, colorizedCheckBox.isSelected());
+            hibernate.create(manga);
+        }
+
+        FxUtils.generateAlertWithoutHeader(Alert.AlertType.INFORMATION, "Success", "Publication created successfully");
+        Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+        stage.close();
+    }
 
     public void setAddPublicationLabel() {
-        if (ButtonPressInfo.getInstace().getAddWasPressed()) {
+        if (dataTransfer.getAddWasPressed()) {
             String title = addPublicationLabel.getText();
-            addPublicationLabel.setText(title + " " + ButtonPressInfo.getInstace().getText());
+            addPublicationLabel.setText(title + " " + dataTransfer.getText());
             Text text = new Text(addPublicationLabel.getText());
             text.setFont(addPublicationLabel.getFont());
             text.setStyle(addPublicationLabel.getStyle());
@@ -100,5 +126,29 @@ public class ProductInfo implements Initializable {
             addPublicationLabel.setMinWidth(width);
             addPublicationLabel.setVisible(true);
         }
+    }
+
+    public boolean isInputEmpty() {
+        boolean isEmpty = false;
+        
+        if (FxUtils.areAllFieldsNotEmpty(productInfoPane)) isEmpty = true;
+
+        if (dataTransfer.getText().equals("Manga")) {
+            if (languageComboBox.getValue() == null || demographicComboBox.getValue() == null || !colorizedCheckBox.isSelected()) {
+                isEmpty = true;
+            }
+        }
+        
+        FxUtils.generateAlertWithoutHeader(Alert.AlertType.ERROR, "Error", "You missed something!");
+        return isEmpty;
+    }
+
+    public void openGenreChooser() throws IOException {
+        StartGUI.newStage("/org.books/genreChooser.fxml", "Genre Chooser");
+    }
+
+    public void exitProductInfo(ActionEvent actionEvent) {
+        Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+        stage.close();
     }
 }

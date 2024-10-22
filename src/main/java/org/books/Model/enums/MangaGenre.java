@@ -1,5 +1,8 @@
 package org.books.Model.enums;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+
 public enum MangaGenre {
     ACTION,
     ADVENTURE,
