@@ -39,4 +39,9 @@ public abstract class Publication {
         this.author = author;
         this.summary = summary;
     }
+
+    @Override
+    public String toString() {
+        return this.title;
+    }
 }

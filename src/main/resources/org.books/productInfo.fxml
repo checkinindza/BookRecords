@@ -23,7 +23,7 @@
       <Spinner fx:id="pageCountSpinner" editable="true" layoutX="62.0" layoutY="331.0" prefHeight="24.0" prefWidth="200.0" />
       <TextField layoutX="299.0" layoutY="146.0" prefHeight="24.0" prefWidth="200.0" promptText="Enter publisher..." />
       <TextField layoutX="299.0" layoutY="84.0" prefHeight="24.0" prefWidth="200.0" promptText="Enter author..." />
-      <TextArea layoutX="61.0" layoutY="392.0" prefHeight="177.0" prefWidth="659.0" promptText="Enter summary..." />
+      <TextArea fx:id="summaryField" layoutX="61.0" layoutY="392.0" prefHeight="177.0" prefWidth="659.0" promptText="Enter summary..." />
       <TextField fx:id="identificationNumberField" layoutX="62.0" layoutY="84.0" prefHeight="24.0" prefWidth="200.0" promptText="Enter identification number..." />
       <ComboBox fx:id="languageComboBox" layoutX="62.0" layoutY="208.0" prefHeight="24.0" prefWidth="200.0" promptText="Choose language..." />
       <ComboBox fx:id="formatComboBox" layoutX="299.0" layoutY="208.0" prefHeight="24.0" prefWidth="200.0" promptText="Choose format..." />
@@ -58,7 +58,7 @@
          </font>
       </Label>
       <Button layoutX="522.0" layoutY="270.0" mnemonicParsing="false" onAction="#openGenreChooser" prefHeight="24.0" prefWidth="200.0" text="Choose genre..." />
-      <Button fx:id="createNewPublication" layoutX="243.0" layoutY="589.0" mnemonicParsing="false" text="OK" />
+      <Button layoutX="243.0" layoutY="589.0" mnemonicParsing="false" onAction="#createNewPublication" text="OK" />
       <Button layoutX="480.0" layoutY="589.0" mnemonicParsing="false" onAction="#exitProductInfo" text="Close" />
       <TextField fx:id="volumeNumberField" layoutX="522.0" layoutY="331.0" prefHeight="24.0" prefWidth="200.0" promptText="Enter volume number..." />
    </children>

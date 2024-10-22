@@ -2,6 +2,7 @@ package org.books.fxControllers;
 
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -253,6 +254,10 @@ public class Main implements Initializable {
         } else {
             typeNotSelectedWarningLabel.setVisible(true);
         }
+    }
+
+    public void loadPublicationList() {
+        dataPopulator.fillTableWithRecordsByCriteria(publicationsListField, Publication.class, "dtype", publicationTypeComboBox.getValue());
     }
 
     // END OF PUBLICATION TAB
