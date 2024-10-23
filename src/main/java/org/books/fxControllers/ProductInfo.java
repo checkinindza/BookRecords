@@ -9,7 +9,9 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import org.books.Model.Book;
 import org.books.Model.Manga;
+import org.books.Model.Periodical;
 import org.books.Model.enums.*;
 import org.books.StartGUI;
 import org.books.hibernateControllers.GenericHibernate;
@@ -63,6 +65,8 @@ public class ProductInfo implements Initializable {
     public TextField authorField;
     @FXML
     public TextField illustratorField;
+    @FXML
+    public Button genreChooserButton;
 
     EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("coursework-shop");
     GenericHibernate hibernate = new GenericHibernate(entityManagerFactory);
@@ -106,12 +110,30 @@ public class ProductInfo implements Initializable {
             editorField.setDisable(true);
             formatComboBox.setDisable(true);
             frequencyComboBox.setDisable(true);
+        } else if (dataTransfer.getText().equals("Book")) {
+            volumeNumberField.setDisable(true);
+            illustratorField.setDisable(true);
+            colorizedCheckBox.setDisable(true);
+            demographicComboBox.setDisable(true);
+            issueNumberField.setDisable(true);
+            editorField.setDisable(true);
+            frequencyComboBox.setDisable(true);
+        } else if (dataTransfer.getText().equals("Periodical")) {
+            volumeNumberField.setDisable(true);
+            illustratorField.setDisable(true);
+            colorizedCheckBox.setDisable(true);
+            demographicComboBox.setDisable(true);
+            formatComboBox.setDisable(true);
+            genreChooserButton.setDisable(true);
         }
     }
 
     public void BooleanPropertyReset() {
         for (MangaGenre genre : MangaGenre.values()) {
-            genre.setSelected();
+            genre.setSelected(false);
+        }
+        for (BookGenre genre : BookGenre.values()) {
+            genre.setSelected(false);
         }
     }
 
@@ -121,9 +143,16 @@ public class ProductInfo implements Initializable {
         }
 
         if (dataTransfer.getText().equals("Manga")) {
-            Manga manga = new Manga(titleField.getText(), languageComboBox.getValue(), datePicker.getValue(), pageCountSpinner.getValue(), editorField.getText(), identificationNumberField.getText(), summaryField.getText(), Integer.parseInt(identificationNumberField.getText()), illustratorField.getText(), Integer.parseInt(volumeNumberField.getText()), demographicComboBox.getValue(), (List<MangaGenre>) (List<?>) selectedGenresHolder.getSelectedGenres(), colorizedCheckBox.isSelected());
+            Manga manga = new Manga(titleField.getText(), languageComboBox.getValue(), datePicker.getValue(), pageCountSpinner.getValue(), publisherField.getText(), identificationNumberField.getText(), summaryField.getText(), Integer.parseInt(identificationNumberField.getText()), illustratorField.getText(), Integer.parseInt(volumeNumberField.getText()), demographicComboBox.getValue(), (List<MangaGenre>) (List<?>) selectedGenresHolder.getSelectedGenres(), colorizedCheckBox.isSelected());
             hibernate.create(manga);
+        } else if (dataTransfer.getText().equals("Book")) {
+            Book book = new Book(titleField.getText(), languageComboBox.getValue(), datePicker.getValue(), pageCountSpinner.getValue(), publisherField.getText(), authorField.getText(), summaryField.getText(), Integer.parseInt(identificationNumberField.getText()), (List<BookGenre>) (List<?>) selectedGenresHolder.getSelectedGenres(), formatComboBox.getValue());
+            hibernate.create(book);
+        } else if (dataTransfer.getText().equals("Periodical")) {
+            Periodical periodical = new Periodical(titleField.getText(), languageComboBox.getValue(), datePicker.getValue(), pageCountSpinner.getValue(), publisherField.getText(), authorField.getText(), summaryField.getText(), Integer.parseInt(identificationNumberField.getText()), Integer.parseInt(issueNumberField.getText()), editorField.getText(), frequencyComboBox.getValue());
+            hibernate.create(periodical);
         }
+
 
         FxUtils.generateAlertWithoutHeader(Alert.AlertType.INFORMATION, "Success", "Publication created successfully");
         BooleanPropertyReset();
@@ -156,12 +185,22 @@ public class ProductInfo implements Initializable {
         if (FxUtils.areAllFieldsNotEmpty(productInfoPane)) isEmpty = true;
 
         if (dataTransfer.getText().equals("Manga")) {
-            if (languageComboBox.getValue() == null || demographicComboBox.getValue() == null) {
+            if (languageComboBox.getValue() == null || demographicComboBox.getValue() == null || selectedGenresHolder.getSelectedGenres().isEmpty()) {
                 isEmpty = true;
             }
         }
 
-        if (selectedGenresHolder.getSelectedGenres().isEmpty()) isEmpty = true;
+        if (dataTransfer.getText().equals("Book") ) {
+            if (selectedGenresHolder.getSelectedGenres().isEmpty() || formatComboBox.getValue() == null) {
+                isEmpty = true;
+            }
+        }
+
+        if (dataTransfer.getText().equals("Periodical")) {
+            if (frequencyComboBox.getValue() == null) {
+                isEmpty = true;
+            }
+        }
 
         if (isEmpty) FxUtils.generateAlertWithoutHeader(Alert.AlertType.ERROR, "You missed something!", "Error");
         return isEmpty;

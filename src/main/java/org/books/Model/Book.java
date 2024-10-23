@@ -20,20 +20,18 @@ import java.util.List;
 @Entity
 
 public class Book extends Publication {
-    private String isbn;
+    private int isbn;
     @Convert(converter = BookGenreConverter.class)
     @Column(name = "genres", nullable = false)
     @SuppressWarnings("JpaDataSourceORMInspection")
     private List<BookGenre> bookGenre;
-    private int publicationYear;
     @Enumerated
     private Format format;
 
-    public Book(String title, Language language, LocalDate publicationDate, int pageCount, String publisher, String author, String summary, String isbn, List<BookGenre> bookGenre, int publicationYear, Format format) {
+    public Book(String title, Language language, LocalDate publicationDate, int pageCount, String publisher, String author, String summary, int isbn, List<BookGenre> bookGenre, Format format) {
         super(title, language, publicationDate, pageCount, publisher, author, summary);
         this.isbn = isbn;
         this.bookGenre = bookGenre;
-        this.publicationYear = publicationYear;
         this.format = format;
     }
 }

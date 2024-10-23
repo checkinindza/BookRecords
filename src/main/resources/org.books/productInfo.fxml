@@ -57,7 +57,7 @@
             <Font name="System Bold" size="13.0" />
          </font>
       </Label>
-      <Button layoutX="522.0" layoutY="270.0" mnemonicParsing="false" onAction="#openGenreChooser" prefHeight="24.0" prefWidth="200.0" text="Choose genre..." />
+      <Button fx:id="genreChooserButton" layoutX="522.0" layoutY="270.0" mnemonicParsing="false" onAction="#openGenreChooser" prefHeight="24.0" prefWidth="200.0" text="Choose genre..." />
       <Button layoutX="243.0" layoutY="652.0" mnemonicParsing="false" onAction="#createNewPublication" text="OK" />
       <Button layoutX="480.0" layoutY="652.0" mnemonicParsing="false" onAction="#exitProductInfo" text="Close" />
       <TextField fx:id="volumeNumberField" layoutX="522.0" layoutY="331.0" prefHeight="24.0" prefWidth="200.0" promptText="Enter volume number..." />

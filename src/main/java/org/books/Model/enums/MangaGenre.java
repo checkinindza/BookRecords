@@ -50,8 +50,8 @@ public enum MangaGenre implements HasSelectedProperty {
         return on;
     }
 
-    public void setSelected() {
-        this.on.set(false);
+    public void setSelected(boolean selected) {
+        this.on.set(selected);
     }
 
     @Override
