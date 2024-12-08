@@ -22,10 +22,9 @@ import java.util.List;
 public class Book extends Publication {
     private int isbn;
     @Convert(converter = BookGenreConverter.class)
-    @Column(name = "genres", nullable = false)
-    @SuppressWarnings("JpaDataSourceORMInspection")
+    @Column(name = "genres", columnDefinition = "varchar(255) default NULL")
     private List<BookGenre> bookGenre;
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private Format format;
 
     public Book(String title, Language language, LocalDate publicationDate, int pageCount, String publisher, String author, String summary, int isbn, List<BookGenre> bookGenre, Format format) {
@@ -33,5 +32,9 @@ public class Book extends Publication {
         this.isbn = isbn;
         this.bookGenre = bookGenre;
         this.format = format;
+    }
+
+    public List<BookGenre> getBookGenres() {
+        return this.bookGenre;
     }
 }

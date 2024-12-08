@@ -1,9 +1,6 @@
 package org.books.Model;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Transient;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,15 +15,18 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 
-public class Client extends User implements Comparable<User> {
+public class Client extends User {
     private String address;
     private LocalDate birthDate;
-    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
+    private String clientBio;
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL , fetch = FetchType.EAGER)
     private List<Comment> commentList;
-    @Transient
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL , fetch = FetchType.EAGER)
     private List<Publication> ownedPublications;
-    @Transient
+    @OneToMany(mappedBy = "borrowerClient", cascade = CascadeType.ALL , fetch = FetchType.EAGER)
     private List<Publication> borrowedPublications;
+    @OneToMany(mappedBy = "commentOwner", cascade = CascadeType.ALL , fetch = FetchType.EAGER)
+    private List<Comment> myComments;
 
     public Client(String login, String password, String name, String surname, String email, String address, LocalDate birthDate, List<Comment> commentList, List<Publication> ownedPublications, List<Publication> borrowedPublications) {
         super(login, password, name, surname, email);
@@ -41,13 +41,5 @@ public class Client extends User implements Comparable<User> {
         super(login, password, name, surname, email);
         this.address = address;
         this.birthDate = birthDate;
-    }
-
-    @Override
-    public int compareTo(User o) {
-        /*if (this.login ? o.getLogin()) {
-            return -1;
-        }*/
-        return -1;
     }
 }

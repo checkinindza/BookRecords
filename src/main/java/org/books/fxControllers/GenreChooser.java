@@ -10,6 +10,9 @@ import javafx.scene.control.cell.CheckBoxListCell;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.books.Interfaces.HasSelectedProperty;
+import org.books.Model.Book;
+import org.books.Model.Manga;
+import org.books.Model.Publication;
 import org.books.Model.enums.BookGenre;
 import org.books.Model.enums.MangaGenre;
 import org.books.utils.DataPopulator;
@@ -54,12 +57,25 @@ public class GenreChooser implements Initializable {
 
 
     public void setupGenreList() {
-        if (dataTransfer.getText().equals("Manga")) {
+        if (!selectedGenresHolder.getSelectedGenres().isEmpty()) {
+            setBooleanProperties();
+        }
+        if ("Manga".equals(dataTransfer.getText()) || (Publication) dataTransfer.getObject() instanceof Manga) {
             dataPopulator.fillTableWithEnums(genreList, MangaGenre.class);
             setListCellFactory(genreList, MangaGenre.class);
-        } else if (dataTransfer.getText().equals("Book")) {
+        } else if ("Book".equals(dataTransfer.getText()) || (Publication) dataTransfer.getObject() instanceof Book) {
             dataPopulator.fillTableWithEnums(genreList, BookGenre.class);
             setListCellFactory(genreList, BookGenre.class);
+        }
+    }
+
+    public void setBooleanProperties() {
+        for (Object genre : selectedGenresHolder.getSelectedGenres()) {
+            if (genre instanceof MangaGenre) {
+                ((MangaGenre) genre).setSelected(true);
+            } else if (genre instanceof BookGenre) {
+                ((BookGenre) genre).setSelected(true);
+            }
         }
     }
 

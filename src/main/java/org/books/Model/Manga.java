@@ -23,10 +23,10 @@ public class Manga extends Publication {
     private int jan;
     private String illustrator;
     private int volumeNumber;
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private Demographic demographic;
     @Convert(converter = MangaGenreConverter.class)
-    @Column(name = "genres", nullable = false)
+    @Column(name = "genres", columnDefinition = "varchar(255) default NULL")
     private List<MangaGenre> mangaGenres;
     private boolean isColor;
 
@@ -38,5 +38,13 @@ public class Manga extends Publication {
         this.demographic = demographic;
         this.mangaGenres = mangaGenres;
         this.isColor = isColor;
+    }
+
+    public boolean getIsColor() {
+        return this.isColor;
+    }
+
+    public void setIsColor(boolean value) {
+        this.isColor = value;
     }
 }

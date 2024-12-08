@@ -1,6 +1,7 @@
 package org.books.Model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,7 +22,7 @@ public class Periodical extends Publication {
     private int issn;
     private int issueNumber;
     private String editor;
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private Frequency frequency;
 
     public Periodical(String title, Language language, LocalDate publicationDate, int pageCount, String publisher, String author, String summary, int issn, int issueNumber, String editor, Frequency frequency) {

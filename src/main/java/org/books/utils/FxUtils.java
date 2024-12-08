@@ -18,9 +18,9 @@ public class FxUtils {
 
     public static void generateAlertWithoutHeader(Alert.AlertType alertType, String title, String content) {
         Alert alert = new Alert(alertType);
-        alert.setTitle(content);
+        alert.setTitle(title);
         alert.setHeaderText(null);
-        alert.setContentText(title);
+        alert.setContentText(content);
         alert.showAndWait();
     }
 
