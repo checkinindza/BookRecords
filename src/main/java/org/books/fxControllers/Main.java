@@ -154,6 +154,8 @@ public class Main implements Initializable {
     public TableColumn<BookTableParameters, Integer> colRequestDate;
     @FXML
     public TableColumn<BookTableParameters, Integer> colBookId;
+    @FXML
+    public TableColumn colBooksDummy;
     //</editor-fold>
     //<editor-fold desc="Borrowed books table">
     @FXML
@@ -307,6 +309,32 @@ public class Main implements Initializable {
             });
             return row;
         });
+
+        Callback<TableColumn<BookTableParameters, Void>, TableCell<BookTableParameters, Void>> historyButton = param -> new TableCell<>() {
+            private final Button viewHistoryBtn = new Button("View history");
+
+            {
+                viewHistoryBtn.setOnAction(event -> {
+                    BookTableParameters row = getTableView().getItems().get(getIndex());
+                    try {
+                        loadHistory(row.getId(), currentUser);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+            }
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(viewHistoryBtn);
+                }
+            }
+        };
+
+        colBooksDummy.setCellFactory(historyButton);
         //</editor-fold>
         //<editor-fold desc="Borrowed books table initialize">
         borrowedBooksTable.setEditable(true);
@@ -343,6 +371,19 @@ public class Main implements Initializable {
         };
         colReturnButton.setCellFactory(callbackReturnButton);
         //</editor-fold>
+    }
+
+    private void loadHistory(int id, User currentUser) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(StartGUI.class.getResource("/org.books/history.fxml"));
+        Parent parent = fxmlLoader.load();
+        History history = fxmlLoader.getController();
+        history.setData(entityManagerFactory, currentUser, id);
+        Stage stage = new Stage();
+        Scene scene = new Scene(parent);
+        stage.setTitle("History");
+        stage.setScene(scene);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.showAndWait();
     }
 
     public void setData(EntityManagerFactory entityManagerFactory, User user) {

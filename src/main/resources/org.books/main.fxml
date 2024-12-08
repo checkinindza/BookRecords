@@ -139,9 +139,10 @@
                           <columns>
                             <TableColumn fx:id="colBookId" prefWidth="39.0" text="ID" />
                             <TableColumn fx:id="colBookTitle" prefWidth="342.0" text="Title" />
-                              <TableColumn fx:id="colBookUser" prefWidth="319.0" text="User" />
-                              <TableColumn fx:id="colBookStatus" prefWidth="167.0" text="Status" />
-                              <TableColumn fx:id="colRequestDate" prefWidth="188.0" text="Request Date" />
+                              <TableColumn fx:id="colBookUser" prefWidth="205.0" text="User" />
+                              <TableColumn fx:id="colBookStatus" prefWidth="115.0" text="Status" />
+                              <TableColumn fx:id="colRequestDate" prefWidth="250.0" text="Request Date" />
+                              <TableColumn fx:id="colBooksDummy" prefWidth="103.0" text="Action" />
                           </columns>
                         </TableView>
                         <Label layoutX="483.0" layoutY="21.0" text="My Books">
