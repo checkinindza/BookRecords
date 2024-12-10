@@ -11,6 +11,7 @@ import org.books.Model.PeriodicRecord;
 import org.books.Model.Publication;
 import org.books.Model.User;
 import org.books.Model.enums.PublicationStatus;
+import org.books.utils.PasswordUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,14 +31,17 @@ public class CustomHibernate extends GenericHibernate {
             CriteriaBuilder cb = entityManager.getCriteriaBuilder();
             CriteriaQuery<User> query = cb.createQuery(User.class);
             Root<User> root = query.from(User.class);
-            query.select(root).where(cb.and(cb.equal(root.get("login"), username), cb.equal(root.get("password"), password)));
+            query.select(root).where(cb.equal(root.get("login"), username));
             Query q = entityManager.createQuery(query);
             user = (User) q.getSingleResult();
+            if (PasswordUtils.verifyPassword(password, user.getPassword())) {
+                return user;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return user;
+        return null;
     }
 
     public List<Publication> getAvailablePublications(User user) {

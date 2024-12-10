@@ -2,10 +2,6 @@ package org.books.fxControllers;
 
 //<editor-fold desc="import zone">
 import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -25,6 +21,7 @@ import org.books.hibernateControllers.CustomHibernate;
 import org.books.utils.DataPopulator;
 import org.books.utils.DataTransfer;
 import org.books.utils.FxUtils;
+import org.books.utils.PasswordUtils;
 
 import java.io.IOException;
 import java.net.URL;
@@ -464,10 +461,10 @@ public class Main implements Initializable {
             return;
         } else {
             if (clientChk.isSelected()) {
-                Client client = new Client(loginField.getText(), pswField.getText(), nameField.getText(), surnameField.getText(), emailField.getText(), bDate.getValue(), addressField.getText());
+                Client client = new Client(loginField.getText(), PasswordUtils.hashPassword(pswField.getText()), nameField.getText(), surnameField.getText(), emailField.getText(), bDate.getValue(), addressField.getText());
                 hibernate.create(client);
             } else {
-                Admin admin = new Admin(loginField.getText(), pswField.getText(), nameField.getText(), surnameField.getText(), emailField.getText(), phoneNum.getText());
+                Admin admin = new Admin(loginField.getText(), PasswordUtils.hashPassword(pswField.getText()), nameField.getText(), surnameField.getText(), emailField.getText(), phoneNum.getText());
                 hibernate.create(admin);
             }
             FxUtils.generateAlertWithoutHeader(Alert.AlertType.INFORMATION, "SUCCESS", "User created successfully");
@@ -497,7 +494,6 @@ public class Main implements Initializable {
             nameField.setText(client.getName());
             surnameField.setText(client.getSurname());
             loginField.setText(client.getLogin());
-            pswField.setText(client.getPassword());
             bDate.setValue(client.getBirthDate());
             addressField.setText(client.getAddress());
             emailField.setText(client.getEmail());
@@ -508,7 +504,6 @@ public class Main implements Initializable {
             nameField.setText(admin.getName());
             surnameField.setText(admin.getSurname());
             loginField.setText(admin.getLogin());
-            pswField.setText(admin.getPassword());
             phoneNum.setText(admin.getPhoneNum());
             emailField.setText(admin.getEmail());
         }
@@ -530,7 +525,7 @@ public class Main implements Initializable {
                     client.setSurname(surnameField.getText());
                     client.setAddress(addressField.getText());
                     client.setBirthDate(bDate.getValue());
-                    client.setPassword(pswField.getText());
+                    client.setPassword(PasswordUtils.hashPassword(pswField.getText()));
                     client.setEmail(emailField.getText());
                     hibernate.update(client);
                 } else {
@@ -538,7 +533,7 @@ public class Main implements Initializable {
                     admin.setName(nameField.getText());
                     admin.setSurname(surnameField.getText());
                     admin.setLogin(loginField.getText());
-                    admin.setPassword(pswField.getText());
+                    admin.setPassword(PasswordUtils.hashPassword(pswField.getText()));
                     admin.setPhone(phoneNum.getText());
                     admin.setEmail(emailField.getText());
                     hibernate.update(admin);
