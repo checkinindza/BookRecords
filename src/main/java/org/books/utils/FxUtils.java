@@ -1,9 +1,6 @@
 package org.books.utils;
 
-import javafx.scene.control.Alert;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
-import javafx.scene.control.TextInputControl;
+import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 
 import java.util.regex.Pattern;
@@ -28,6 +25,7 @@ public class FxUtils {
         return parent.getChildren().stream()
                 .filter(node -> node instanceof TextInputControl)
                 .map(node -> (TextInputControl) node)
+                .filter(field -> !(field instanceof PasswordField))
                 .allMatch(field -> !field.getText().isEmpty());
     }
 

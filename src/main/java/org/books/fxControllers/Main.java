@@ -525,7 +525,9 @@ public class Main implements Initializable {
                     client.setSurname(surnameField.getText());
                     client.setAddress(addressField.getText());
                     client.setBirthDate(bDate.getValue());
-                    client.setPassword(PasswordUtils.hashPassword(pswField.getText()));
+                    if (!pswField.getText().isEmpty()) {
+                        client.setPassword(PasswordUtils.hashPassword(pswField.getText()));
+                    }
                     client.setEmail(emailField.getText());
                     hibernate.update(client);
                 } else {
@@ -533,7 +535,9 @@ public class Main implements Initializable {
                     admin.setName(nameField.getText());
                     admin.setSurname(surnameField.getText());
                     admin.setLogin(loginField.getText());
-                    admin.setPassword(PasswordUtils.hashPassword(pswField.getText()));
+                    if (!pswField.getText().isEmpty()) {
+                        admin.setPassword(PasswordUtils.hashPassword(pswField.getText()));
+                    }
                     admin.setPhone(phoneNum.getText());
                     admin.setEmail(emailField.getText());
                     hibernate.update(admin);
