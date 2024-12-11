@@ -52,7 +52,7 @@ public class History implements Initializable {
         colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
         colTransactionDate.setCellValueFactory(new PropertyValueFactory<>("transactionDate"));
         colPublication.setCellValueFactory(new PropertyValueFactory<>("publication"));
-        colClient.setCellValueFactory(new PropertyValueFactory<>("client"));
+        colClient.setCellValueFactory(new PropertyValueFactory<>("user"));
     }
 
     public void setData(EntityManagerFactory entityManagerFactory, User currentUser) {
@@ -77,7 +77,6 @@ public class History implements Initializable {
     private void loadPublicationsById(int id) {
         bookHistoryTable.getItems().clear();
         bookHistoryTable.getItems().addAll(hibernate.getPeriodicById(id));
-
     }
 
     public void filterRecords() {

@@ -4,7 +4,7 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
-import org.books.hibernateControllers.GenericHibernate;
+import org.books.hibernateControllers.CustomHibernate;
 import org.reflections.Reflections;
 
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ import static org.reflections.scanners.Scanners.SubTypes;
 
 public class DataPopulator {
     EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("coursework-shop");
-    GenericHibernate hibernate = new GenericHibernate(entityManagerFactory);
+    CustomHibernate hibernate = new CustomHibernate(entityManagerFactory);
 
     public void fillTableWithAllRecords(ListView table, Class <?> entityClass) {
         table.getItems().clear();

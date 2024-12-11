@@ -93,19 +93,30 @@
                   </AnchorPane>
             </content>
           </Tab>
-          <Tab fx:id="publicationManagementTab" text="Publication Manager">
+          <Tab fx:id="publicationManagementTab" onSelectionChanged="#loadData" text="Publication Manager">
 
             <content>
               <AnchorPane fx:id="publicationsPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <ListView fx:id="publicationsListField" layoutX="33.0" layoutY="82.0" prefHeight="349.0" prefWidth="1003.0" />
-                        <ComboBox fx:id="publicationTypeComboBox" layoutX="477.0" layoutY="27.0" onAction="#loadPublicationList" prefWidth="150.0" />
+                        <ComboBox fx:id="publicationTypeComboBox" layoutX="477.0" layoutY="27.0" onAction="#fillAdminPublicationsTablePerSelectedType" prefWidth="150.0" />
                         <Label layoutX="320.0" layoutY="31.0" text="Choose publication type:" />
-                        <Button layoutX="345.0" layoutY="461.0" mnemonicParsing="false" onAction="#openAddWindow" text="Add" />
-                        <Button layoutX="489.0" layoutY="461.0" mnemonicParsing="false" onAction="#updatePublication" text="Update" />
-                        <Button layoutX="655.0" layoutY="461.0" mnemonicParsing="false" onAction="#deletePublication" text="Delete" />
+                        <Button layoutX="477.0" layoutY="67.0" mnemonicParsing="false" onAction="#openAddWindow" prefHeight="24.0" prefWidth="152.0" text="Add New Publication" />
                         <Label fx:id="typeNotSelectedWarningLabel" layoutX="649.0" layoutY="29.0" text="You have to select a type!" textFill="RED" visible="false" />
-                        <Label fx:id="publicationNotSelectedWarningLabel" layoutX="649.0" layoutY="29.0" text="You haven't selected a publication!" textFill="RED" visible="false" />
+                        <TableView fx:id="adminPublicationsTable" layoutX="21.0" layoutY="112.0" prefHeight="452.0" prefWidth="1019.0">
+                          <columns>
+                            <TableColumn fx:id="colAdminPublicationsId" prefWidth="75.0" text="ID" />
+                            <TableColumn fx:id="colAdminPublicationsTitle" prefWidth="201.0" text="Title" />
+                              <TableColumn fx:id="colAdminPublicationsStatus" minWidth="0.0" prefWidth="196.0" text="Status" />
+                              <TableColumn fx:id="colAdminPublicationsOwner" minWidth="0.0" prefWidth="202.0" text="Owner" />
+                              <TableColumn fx:id="colAdminPublicationsBorrower" minWidth="0.0" prefWidth="199.0" text="Borrower" />
+                              <TableColumn fx:id="colAdminPublicationsDummy" prefWidth="145.0" text="Action" />
+                          </columns>
+                        </TableView>
+                        <Label layoutX="400.0" layoutY="579.0" text="Double click on a row to open edit window">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
                      </children></AnchorPane>
             </content>
           </Tab>
@@ -135,7 +146,7 @@
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="636.0" prefWidth="1056.0">
                      <children>
-                        <TableView fx:id="myBookList" layoutY="61.0" prefHeight="247.0" prefWidth="1056.0">
+                        <TableView fx:id="myBookList" layoutY="46.0" prefHeight="247.0" prefWidth="1056.0">
                           <columns>
                             <TableColumn fx:id="colBookId" prefWidth="39.0" text="ID" />
                             <TableColumn fx:id="colBookTitle" prefWidth="342.0" text="Title" />
@@ -145,17 +156,22 @@
                               <TableColumn fx:id="colBooksDummy" prefWidth="103.0" text="Action" />
                           </columns>
                         </TableView>
-                        <Label layoutX="483.0" layoutY="21.0" text="My Books">
+                        <Label layoutX="14.0" layoutY="11.0" text="My Books">
                            <font>
                               <Font name="System Bold" size="19.0" />
                            </font>
                         </Label>
-                        <Label layoutX="452.0" layoutY="339.0" text="Borrowed Books">
+                        <Label layoutX="14.0" layoutY="306.0" text="Borrowed Books">
                            <font>
                               <Font name="System Bold" size="19.0" />
                            </font>
                         </Label>
-                        <TableView fx:id="borrowedBooksTable" layoutY="387.0" prefHeight="238.0" prefWidth="1056.0">
+                        <Label layoutX="398.0" layoutY="588.0" text="Double click on a row to open edit window">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <TableView fx:id="borrowedBooksTable" layoutY="342.0" prefHeight="238.0" prefWidth="1056.0">
                           <columns>
                             <TableColumn fx:id="colBorrowedBookID" prefWidth="40.0" text="ID" />
                             <TableColumn fx:id="colBorrowedBookTitle" prefWidth="599.0" text="Title" />

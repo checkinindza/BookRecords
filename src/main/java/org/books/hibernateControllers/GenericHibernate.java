@@ -88,6 +88,7 @@ public class GenericHibernate {
             T entity = entityManager.find(entityClass, id);
             entityManager.remove(entity);
             entityManager.getTransaction().commit();
+            // FxUtils.generateAlertWithoutHeader(Alert.AlertType.INFORMATION, "Success", "Publication deleted successfully");
         } catch (Exception e) {
             FxUtils.generateAlertWithoutHeader(Alert.AlertType.ERROR, "Error", "Error during DELETE operation");
         } finally {
@@ -112,25 +113,5 @@ public class GenericHibernate {
             if (entityManager != null) entityManager.close();
         }
         return result;
-    }
-
-    public <T> List<T> getRecordsByCriteria(Class<T> entityClass, String criteria, String compareTo) {
-        List<T> list = new ArrayList<>();
-        try {
-            entityManager = entityManagerFactory.createEntityManager();
-            entityManager.getTransaction().begin();
-            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-            CriteriaQuery<T> cq = cb.createQuery(entityClass);
-            Root<T> rootEntry = cq.from(entityClass);
-            cq.where(cb.equal(rootEntry.get(criteria), compareTo));
-            Query q = entityManager.createQuery(cq);
-            list = q.getResultList();
-            entityManager.getTransaction().commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (entityManager != null) entityManager.close();
-        }
-        return list;
     }
 }

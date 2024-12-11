@@ -26,10 +26,6 @@ import java.util.ResourceBundle;
 
 public class ProductInfo implements Initializable {
     @FXML
-    public Label itemNameLabel;
-    @FXML
-    public Label addPublicationLabel;
-    @FXML
     public TextField titleField;
     @FXML
     public Spinner<Integer> pageCountSpinner;
@@ -65,9 +61,6 @@ public class ProductInfo implements Initializable {
     public TextField illustratorField;
     @FXML
     public Button genreChooserButton;
-    @FXML
-    public ComboBox<PublicationStatus> publicationStatusComboBox;
-
     DataPopulator dataPopulator = new DataPopulator();
     DataTransfer dataTransfer = DataTransfer.getInstance();
     SelectedGenresHolder selectedGenresHolder = SelectedGenresHolder.getInstance();
@@ -80,7 +73,6 @@ public class ProductInfo implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         this.entityManagerFactory = dataTransfer.getEntityManagerFactory();
         this.hibernate = new CustomHibernate(entityManagerFactory);
-        setAddPublicationLabel();
         setupSpinner();
         fillComboBoxes();
         setTextFieldFormatter();
@@ -110,16 +102,15 @@ public class ProductInfo implements Initializable {
         dataPopulator.fillComboBoxWithEnums(Format.class, formatComboBox);
         dataPopulator.fillComboBoxWithEnums(Demographic.class, demographicComboBox);
         dataPopulator.fillComboBoxWithEnums(Frequency.class, frequencyComboBox);
-        dataPopulator.fillComboBoxWithEnums(PublicationStatus.class, publicationStatusComboBox);
     }
 
     public void disableFields() {
-        if ("Manga".equals(dataTransfer.getText()) || publication instanceof Manga) {
+        if (publication instanceof Manga) {
             issueNumberField.setDisable(true);
             editorField.setDisable(true);
             formatComboBox.setDisable(true);
             frequencyComboBox.setDisable(true);
-        } else if ("Book".equals(dataTransfer.getText()) || publication instanceof Book) {
+        } else if (publication instanceof Book) {
             volumeNumberField.setDisable(true);
             illustratorField.setDisable(true);
             colorizedCheckBox.setDisable(true);
@@ -127,7 +118,7 @@ public class ProductInfo implements Initializable {
             issueNumberField.setDisable(true);
             editorField.setDisable(true);
             frequencyComboBox.setDisable(true);
-        } else if ("Periodical".equals(dataTransfer.getText()) || publication instanceof Periodical) {
+        } else if (publication instanceof Periodical) {
             volumeNumberField.setDisable(true);
             illustratorField.setDisable(true);
             colorizedCheckBox.setDisable(true);
@@ -151,7 +142,7 @@ public class ProductInfo implements Initializable {
             return;
         }
 
-        if (dataTransfer.getText().equals("Manga")) {
+        if (dataTransfer.getData().equals("Manga")) {
             Manga manga = new Manga(titleField.getText(),
                     languageComboBox.getSelectionModel().getSelectedItem(),
                     datePicker.getValue(),
@@ -159,7 +150,7 @@ public class ProductInfo implements Initializable {
                     publisherField.getText(),
                     authorField.getText(),
                     summaryField.getText(),
-                    publicationStatusComboBox.getSelectionModel().getSelectedItem(),
+                    PublicationStatus.AVAILABLE,
                     Integer.parseInt(identificationNumberField.getText()),
                     illustratorField.getText(),
                     Integer.parseInt(volumeNumberField.getText()),
@@ -167,7 +158,7 @@ public class ProductInfo implements Initializable {
                     (List<MangaGenre>) (List<?>) selectedGenresHolder.getSelectedGenres(),
                     colorizedCheckBox.isSelected());
             hibernate.create(manga);
-        } else if (dataTransfer.getText().equals("Book")) {
+        } else if (dataTransfer.getData().equals("Book")) {
             Book book = new Book(titleField.getText(),
                     languageComboBox.getSelectionModel().getSelectedItem(),
                     datePicker.getValue(),
@@ -175,12 +166,12 @@ public class ProductInfo implements Initializable {
                     publisherField.getText(),
                     authorField.getText(),
                     summaryField.getText(),
-                    publicationStatusComboBox.getSelectionModel().getSelectedItem(),
+                    PublicationStatus.AVAILABLE,
                     Integer.parseInt(identificationNumberField.getText()),
                     formatComboBox.getSelectionModel().getSelectedItem(),
                     (List<BookGenre>) (List<?>) selectedGenresHolder.getSelectedGenres());
             hibernate.create(book);
-        } else if (dataTransfer.getText().equals("Periodical")) {
+        } else if (dataTransfer.getData().equals("Periodical")) {
             Periodical periodical = new Periodical(titleField.getText(),
                     languageComboBox.getSelectionModel().getSelectedItem(),
                     datePicker.getValue(),
@@ -188,7 +179,7 @@ public class ProductInfo implements Initializable {
                     publisherField.getText(),
                     authorField.getText(),
                     summaryField.getText(),
-                    publicationStatusComboBox.getSelectionModel().getSelectedItem(),
+                    PublicationStatus.AVAILABLE,
                     Integer.parseInt(identificationNumberField.getText()),
                     Integer.parseInt(issueNumberField.getText()),
                     editorField.getText(),
@@ -216,7 +207,7 @@ public class ProductInfo implements Initializable {
         latestPublication.setPublisher(publisherField.getText());
         latestPublication.setAuthor(authorField.getText());
         latestPublication.setSummary(summaryField.getText());
-        latestPublication.setPublicationStatus(publicationStatusComboBox.getSelectionModel().getSelectedItem());
+        latestPublication.setPublicationStatus(PublicationStatus.AVAILABLE);
 
         if (latestPublication instanceof Manga) {
             Manga manga = (Manga) latestPublication;
@@ -297,37 +288,24 @@ public class ProductInfo implements Initializable {
         FxUtils.setTextFieldIntOnly(issueNumberField);
     }
 
-    public void setAddPublicationLabel() {
-        if (dataTransfer.getAddWasPressed()) {
-            String title = addPublicationLabel.getText();
-            addPublicationLabel.setText(title + " " + dataTransfer.getText());
-            Text text = new Text(addPublicationLabel.getText());
-            text.setFont(addPublicationLabel.getFont());
-            text.setStyle(addPublicationLabel.getStyle());
-            double width = text.getLayoutBounds().getWidth();
-            addPublicationLabel.setMinWidth(width);
-            addPublicationLabel.setVisible(true);
-        }
-    }
-
     public boolean isInputEmpty() {
         boolean isEmpty = false;
         
         if (FxUtils.areAllFieldsNotEmpty(productInfoPane)) isEmpty = true;
 
-        if ("Manga".equals(dataTransfer.getText()) || publication instanceof Manga) {
+        if ("Manga".equals(dataTransfer.getData()) || publication instanceof Manga) {
             if (languageComboBox.getValue() == null || demographicComboBox.getValue() == null || selectedGenresHolder.getSelectedGenres().isEmpty()) {
                 isEmpty = true;
             }
         }
 
-        if ("Book".equals(dataTransfer.getText()) || publication instanceof Book) {
+        if ("Book".equals(dataTransfer.getData()) || publication instanceof Book) {
             if (selectedGenresHolder.getSelectedGenres().isEmpty() || formatComboBox.getValue() == null) {
                 isEmpty = true;
             }
         }
 
-        if ("Periodical".equals(dataTransfer.getText()) || publication instanceof Periodical) {
+        if ("Periodical".equals(dataTransfer.getData()) || publication instanceof Periodical) {
             if (frequencyComboBox.getValue() == null) {
                 isEmpty = true;
             }

@@ -60,10 +60,10 @@ public class GenreChooser implements Initializable {
         if (!selectedGenresHolder.getSelectedGenres().isEmpty()) {
             setBooleanProperties();
         }
-        if ("Manga".equals(dataTransfer.getText()) || (Publication) dataTransfer.getObject() instanceof Manga) {
+        if ("Manga".equals(dataTransfer.getData()) || (Publication) dataTransfer.getObject() instanceof Manga) {
             dataPopulator.fillTableWithEnums(genreList, MangaGenre.class);
             setListCellFactory(genreList, MangaGenre.class);
-        } else if ("Book".equals(dataTransfer.getText()) || (Publication) dataTransfer.getObject() instanceof Book) {
+        } else if ("Book".equals(dataTransfer.getData()) || (Publication) dataTransfer.getObject() instanceof Book) {
             dataPopulator.fillTableWithEnums(genreList, BookGenre.class);
             setListCellFactory(genreList, BookGenre.class);
         }

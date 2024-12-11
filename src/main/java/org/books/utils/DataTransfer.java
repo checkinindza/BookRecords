@@ -11,7 +11,7 @@ public final class DataTransfer {
     private boolean addWasPressed;
     private boolean updateWasPressed;
     private EntityManagerFactory entityManagerFactory;
-    private String text;
+    private String data;
     private Object object;
     private final static DataTransfer instance = new DataTransfer();
 

@@ -76,7 +76,7 @@ public class CustomHibernate extends GenericHibernate {
         return publications;
     }
 
-    public void  deleteComment(int id) {
+    public void deleteComment(int id) {
         try {
             entityManager.getTransaction().begin();
             var comment = entityManager.find(Comment.class, id);
@@ -133,5 +133,48 @@ public class CustomHibernate extends GenericHibernate {
             e.printStackTrace();
         }
         return periodicRecords;
+    }
+
+    public <T> List<T> getRecordsByCriteria(Class<T> entityClass, String criteria, String compareTo) {
+        List<T> list = new ArrayList<>();
+        try {
+            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+            CriteriaQuery<T> cq = cb.createQuery(entityClass);
+            Root<T> rootEntry = cq.from(entityClass);
+            cq.where(cb.equal(rootEntry.get(criteria), compareTo));
+            Query q = entityManager.createQuery(cq);
+            list = q.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public User getUserByPublication(int publicationId) {
+        User user = null;
+        Publication publication = null;
+
+        try {
+            entityManager.clear();
+            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+            CriteriaQuery<Publication> queryPublication = cb.createQuery(Publication.class);
+            Root<Publication> rootPublication = queryPublication.from(Publication.class);
+            queryPublication.select(rootPublication).where(cb.equal(rootPublication.get("id"), publicationId));
+            Query q = entityManager.createQuery(queryPublication);
+            publication = (Publication) q.getSingleResult();
+            if (publication.getOwner() != null) {
+                CriteriaQuery<User> queryUser = cb.createQuery(User.class);
+                Root<User> rootUser = queryUser.from(User.class);
+                queryUser.select(rootUser).where(cb.equal(rootUser.get("id"), publication.getOwner().getId()));
+                q = entityManager.createQuery(queryUser);
+                user = (User) q.getSingleResult();
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return user;
     }
 }

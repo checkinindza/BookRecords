@@ -77,7 +77,21 @@ public class Main implements Initializable {
     public AnchorPane usersManagePane;
     //</editor-fold>
 
-    //<editor-fold desc="Main publication tab fields">
+    //<editor-fold desc="Admin publications table">
+    @FXML
+    public TableView<AdminPublicationsTableParameters> adminPublicationsTable;
+    @FXML
+    public TableColumn<AdminPublicationsTableParameters, Integer> colAdminPublicationsId;
+    @FXML
+    public TableColumn<AdminPublicationsTableParameters, String> colAdminPublicationsTitle;
+    @FXML
+    public TableColumn colAdminPublicationsStatus;
+    @FXML
+    public TableColumn colAdminPublicationsOwner;
+    @FXML
+    public TableColumn colAdminPublicationsBorrower;
+    @FXML
+    public TableColumn colAdminPublicationsDummy;
     @FXML
     public AnchorPane publicationsPane;
     @FXML
@@ -86,8 +100,6 @@ public class Main implements Initializable {
     public ComboBox<String> publicationTypeComboBox;
     @FXML
     public Label typeNotSelectedWarningLabel;
-    @FXML
-    public Label publicationNotSelectedWarningLabel;
     //</editor-fold>
 
     //<editor-fold desc="Alternative user management tab fields">
@@ -255,19 +267,22 @@ public class Main implements Initializable {
 
         Callback<TableColumn<BookTableParameters, Void>, TableCell<BookTableParameters, Void>> callbackBookStatus = param -> {
             final TableCell<BookTableParameters, Void> cell = new TableCell<>() {
+                private boolean isUpdating = false;
                 private final ChoiceBox<PublicationStatus> bookStatus = new ChoiceBox<>();
                 {
                     bookStatus.getItems().addAll(PublicationStatus.values());
                     bookStatus.setOnAction(event -> {
-                        BookTableParameters rowData = getTableRow().getItem();
-                        if (rowData != null) {
-                            rowData.setPublicationStatus(bookStatus.getValue());
+                        if (!isUpdating) {
+                            BookTableParameters rowData = getTableRow().getItem();
+                            if (rowData != null) {
+                                rowData.setPublicationStatus(bookStatus.getValue());
 
-                            Publication publication = hibernate.getEntityById(Publication.class, rowData.getId());
-                            publication.setPublicationStatus(bookStatus.getValue());
-                            hibernate.update(publication);
+                                Publication publication = hibernate.getEntityById(Publication.class, rowData.getId());
+                                publication.setPublicationStatus(bookStatus.getValue());
+                                hibernate.update(publication);
 
-                            insertPublicationRecord(publication);
+                                insertPublicationRecord(publication);
+                            }
                         }
                     });
                 }
@@ -278,9 +293,11 @@ public class Main implements Initializable {
                     if (empty) {
                         setGraphic(null);
                     } else {
+                        isUpdating = true;
                         BookTableParameters rowData = getTableRow().getItem();
                         bookStatus.setValue(rowData.getPublicationStatus());
                         setGraphic(bookStatus);
+                        isUpdating = false;
                     }
                 }
             };
@@ -297,7 +314,7 @@ public class Main implements Initializable {
                         dataTransfer.setObject(hibernate.getEntityById(Publication.class, rowData.getId()));
                         dataTransfer.setUpdateWasPressed(true);
                         dataTransfer.setEntityManagerFactory(entityManagerFactory);
-                        StartGUI.newStage("/org.books/productInfo.fxml", "Product View");
+                        StartGUI.newStage("/org.books/productInfo.fxml", "Edit publication");
                         fillBookList();
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -367,6 +384,138 @@ public class Main implements Initializable {
             return cell;
         };
         colReturnButton.setCellFactory(callbackReturnButton);
+        //</editor-fold>
+        //<editor-fold desc="Admin publications table initialize">
+        colAdminPublicationsId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        colAdminPublicationsTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
+
+        Callback<TableColumn<AdminPublicationsTableParameters, Void>, TableCell<AdminPublicationsTableParameters, Void>> callBackAdminPublicationStatus = param -> {
+            final TableCell<AdminPublicationsTableParameters, Void> cell = new TableCell<>() {
+                private boolean isUpdating = false;
+                private final ChoiceBox<PublicationStatus> publicationStatus = new ChoiceBox<>();
+                {
+                    publicationStatus.getItems().addAll(PublicationStatus.values());
+                    publicationStatus.setOnAction(event -> {
+                        if (!isUpdating) {
+                            AdminPublicationsTableParameters rowData = getTableRow().getItem();
+                            if (rowData != null) {
+                                rowData.setPublicationStatus(publicationStatus.getValue());
+
+                                Publication publication = hibernate.getEntityById(Publication.class, rowData.getId());
+                                publication.setPublicationStatus(publicationStatus.getValue());
+                                hibernate.update(publication);
+
+                                insertPublicationRecord(publication);
+                            }
+                        }
+                    });
+                }
+
+                @Override
+                protected void updateItem(Void item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setGraphic(null);
+                    } else {
+                        isUpdating = true;
+                        AdminPublicationsTableParameters rowData = getTableRow().getItem();
+                        publicationStatus.setValue(rowData.getPublicationStatus());
+                        setGraphic(publicationStatus);
+                        isUpdating = false;
+                    }
+                }
+            };
+            return cell;
+        };
+        colAdminPublicationsStatus.setCellFactory(callBackAdminPublicationStatus);
+        Callback<TableColumn<AdminPublicationsTableParameters, Void>, TableCell<AdminPublicationsTableParameters, Void>> callBackAdminPublicationOwner = param -> {
+            final TableCell<AdminPublicationsTableParameters, Void> cell = new TableCell<>() {
+                private boolean isUpdating = false;
+                private final ChoiceBox<Client> publicationOwner = new ChoiceBox<>();
+                {
+                    publicationOwner.getItems().addAll(hibernate.getAllRecords(Client.class));
+                    publicationOwner.setOnAction(event -> {
+                        if (!isUpdating) {
+                            AdminPublicationsTableParameters rowData = getTableRow().getItem();
+                            if (rowData != null) {
+                                Publication publication = hibernate.getEntityById(Publication.class, rowData.getId());
+
+                                rowData.setPublicationOwner(publicationOwner.getValue().getName() + " " + publicationOwner.getValue().getSurname());
+
+
+                                publication.setOwner(publicationOwner.getValue());
+                                hibernate.update(publication);
+
+                                insertPublicationRecord(publication);
+                            }
+                        }
+                    });
+                }
+                @Override
+                protected void updateItem(Void item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setGraphic(null);
+                    } else {
+                        isUpdating = true;
+                        publicationOwner.getItems().clear();
+                        publicationOwner.getItems().addAll(hibernate.getAllRecords(Client.class));
+                        AdminPublicationsTableParameters rowData = getTableRow().getItem();
+                        Client client = (Client) hibernate.getUserByPublication(rowData.getId());
+                        if (client != null) {
+                            publicationOwner.setValue(client);
+                        } else {
+                            publicationOwner.setValue(null);
+                        }
+                        setGraphic(publicationOwner);
+                        isUpdating = false;
+                    }
+                }
+            };
+            return cell;
+        };
+        colAdminPublicationsOwner.setCellFactory(callBackAdminPublicationOwner);
+        Callback<TableColumn<AdminPublicationsTableParameters, Void>, TableCell<AdminPublicationsTableParameters, Void>> callbackAdminPublicationsDeleteButton = param -> {
+            final TableCell<AdminPublicationsTableParameters, Void> cell = new TableCell<>() {
+                private final Button deleteButton = new Button("Delete"); {
+                    deleteButton.setOnAction(event -> {
+                        AdminPublicationsTableParameters row = getTableView().getItems().get(getIndex());
+                        hibernate.delete(Publication.class, row.getId());
+                        fillAdminPublicationsTablePerSelectedType();
+                    });
+                }
+                @Override
+                protected void updateItem(Void item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setGraphic(null);
+                    } else {
+                        setGraphic(deleteButton);
+                    }
+                }
+            };
+            return cell;
+        };
+
+        colAdminPublicationsDummy.setCellFactory(callbackAdminPublicationsDeleteButton);
+
+        adminPublicationsTable.setRowFactory(tv -> {
+            TableRow<AdminPublicationsTableParameters> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (!row.isEmpty())) {
+                    try {
+                        AdminPublicationsTableParameters rowData = row.getItem();
+                        dataTransfer.setObject(hibernate.getEntityById(Publication.class, rowData.getId()));
+                        dataTransfer.setUpdateWasPressed(true);
+                        dataTransfer.setEntityManagerFactory(entityManagerFactory);
+                        StartGUI.newStage("/org.books/productInfo.fxml", "Edit publication");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            return row;
+        });
         //</editor-fold>
     }
 
@@ -450,6 +599,20 @@ public class Main implements Initializable {
             borrowedBooksTableParameters.setId(publication.getId());
             borrowedBooksTableParameters.setPublicationTitle(publication.getTitle());
             borrowedBooksTable.getItems().add(borrowedBooksTableParameters);
+        }
+    }
+
+    public void fillAdminPublicationsTablePerSelectedType() {
+        adminPublicationsTable.getItems().clear();
+        List<Publication> publications = hibernate.getRecordsByCriteria(Publication.class, "dtype", publicationTypeComboBox.getValue());
+        for (Publication publication : publications) {
+            AdminPublicationsTableParameters adminPublicationsTableParameters = new AdminPublicationsTableParameters();
+            adminPublicationsTableParameters.setId(publication.getId());
+            adminPublicationsTableParameters.setTitle(publication.getTitle());
+            adminPublicationsTableParameters.setPublicationStatus(publication.getPublicationStatus());
+            if (publication.getOwner() != null) adminPublicationsTableParameters.setPublicationOwner(publication.getOwner().getName() + " " + publication.getOwner().getSurname());
+            if (publication.getBorrowerClient() != null) adminPublicationsTableParameters.setPublicationBorrower(publication.getBorrowerClient().getName() + " " + publication.getBorrowerClient().getSurname());
+            adminPublicationsTable.getItems().add(adminPublicationsTableParameters);
         }
     }
     //</editor-fold>
@@ -623,43 +786,10 @@ public class Main implements Initializable {
         if (!publicationTypeComboBox.getSelectionModel().isEmpty()) {
             typeNotSelectedWarningLabel.setVisible(false);
             dataTransfer.setAddWasPressed(true);
-            dataTransfer.setText(publicationTypeComboBox.getValue());
+            dataTransfer.setData(publicationTypeComboBox.getValue());
             dataTransfer.setEntityManagerFactory(entityManagerFactory);
-            StartGUI.newStage("/org.books/productInfo.fxml", "Product View");
-            dataPopulator.fillTableWithRecordsByCriteria(publicationsListField, Publication.class, "dtype", publicationTypeComboBox.getValue());
-        } else {
-            typeNotSelectedWarningLabel.setVisible(true);
-        }
-    }
-
-    public void loadPublicationList() {
-        dataPopulator.fillTableWithRecordsByCriteria(publicationsListField, Publication.class, "dtype", publicationTypeComboBox.getValue());
-    }
-
-    public void deletePublication() {
-        selectedPublication = (Publication) publicationsListField.getSelectionModel().getSelectedItem();
-        if (!checkIfSelectionWasMade(publicationsPane, "publicationNotSelectedWarningLabel", selectedPublication)) {
-            return;
-        } else {
-            hibernate.delete(Publication.class, selectedPublication.getId());
-            FxUtils.generateAlertWithoutHeader(Alert.AlertType.INFORMATION, "Success", "Publication deleted successfully");
-            dataPopulator.fillTableWithRecordsByCriteria(publicationsListField, Publication.class, "dtype", publicationTypeComboBox.getValue());}
-    }
-
-    public void updatePublication() throws IOException {
-        if (!publicationTypeComboBox.getValue().isEmpty()) {
-            selectedPublication = (Publication) publicationsListField.getSelectionModel().getSelectedItem();
-            if (!checkIfSelectionWasMade(publicationsPane, "publicationNotSelectedWarningLabel", selectedPublication)) {
-                return;
-            } else {
-                typeNotSelectedWarningLabel.setVisible(false);
-                dataTransfer.setUpdateWasPressed(true);
-                dataTransfer.setObject(selectedPublication);
-                dataTransfer.setText(publicationTypeComboBox.getValue());
-                dataTransfer.setEntityManagerFactory(entityManagerFactory);
-                StartGUI.newStage("/org.books/productInfo.fxml", "Product View");
-                dataPopulator.fillTableWithRecordsByCriteria(publicationsListField, Publication.class, "dtype", publicationTypeComboBox.getValue());
-            }
+            StartGUI.newStage("/org.books/productInfo.fxml", "Add publication");
+            fillAdminPublicationsTablePerSelectedType();
         } else {
             typeNotSelectedWarningLabel.setVisible(true);
         }
@@ -677,6 +807,8 @@ public class Main implements Initializable {
         } else if (clientBookManagementTab.isSelected()) {
             fillBookList();
             fillBorrowedBooksTable();
+        } else if (publicationManagementTab.isSelected()) {
+            fillAdminPublicationsTablePerSelectedType();
         }
     }
 
@@ -704,7 +836,7 @@ public class Main implements Initializable {
     }
 
     private void insertPublicationRecord(Publication publication) {
-        PeriodicRecord periodicRecord = new PeriodicRecord(publication.getBorrowerClient(), publication, LocalDate.now(), publication.getPublicationStatus());
+        PeriodicRecord periodicRecord = new PeriodicRecord(currentUser, publication, LocalDate.now(), publication.getPublicationStatus());
         hibernate.create(periodicRecord);
     }
 

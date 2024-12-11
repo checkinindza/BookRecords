@@ -9,6 +9,7 @@ import org.books.Model.enums.Language;
 import org.books.Model.enums.PublicationStatus;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -20,11 +21,10 @@ public abstract class Publication {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected int id;
-    protected String title;
-    @Enumerated(EnumType.STRING)
-    protected Language language;
-    protected LocalDate publicationDate;
     protected int pageCount;
+    protected String title;
+    protected LocalDate publicationDate;
+    protected LocalDate requestDate;
     @ManyToOne
     protected Client owner;
     @ManyToOne
@@ -32,11 +32,14 @@ public abstract class Publication {
     protected String publisher;
     protected String author;
     protected String summary;
-    @Enumerated(EnumType.STRING)
-    protected PublicationStatus publicationStatus;
     @Column(insertable = false, updatable = false)
     protected String dtype;
-    protected LocalDate requestDate;
+    @Enumerated(EnumType.STRING)
+    protected PublicationStatus publicationStatus;
+    @Enumerated(EnumType.STRING)
+    protected Language language;
+    @OneToMany(mappedBy = "publication", cascade = CascadeType.ALL)
+    protected List<PeriodicRecord> records;
 
     public Publication(String title, Language language, LocalDate publicationDate, int pageCount, String publisher, String author, String summary, PublicationStatus publicationStatus) {
         this.title = title;

@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -22,6 +24,8 @@ public abstract class User {
     protected String name;
     protected String surname;
     protected String email;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL , fetch = FetchType.EAGER)
+    private List<PeriodicRecord> periodicRecords;
 
     public User(String login, String password, String name, String surname, String email) {
         this.login = login;

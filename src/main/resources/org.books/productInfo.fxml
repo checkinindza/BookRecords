@@ -13,108 +13,97 @@
 
 <AnchorPane fx:id="productInfoPane" prefHeight="699.0" prefWidth="781.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.books.fxControllers.ProductInfo">
    <children>
-      <Label fx:id="itemNameLabel" layoutX="237.0" layoutY="35.0" text="Editing: " visible="false" />
-      <Label fx:id="addPublicationLabel" contentDisplay="BOTTOM" layoutX="62.0" layoutY="25.0" prefHeight="21.0" prefWidth="152.0" text="New Publication:" textAlignment="JUSTIFY">
-         <font>
-            <Font name="System Bold" size="18.0" />
-         </font></Label>
-      <TextField fx:id="titleField" layoutX="61.0" layoutY="146.0" prefHeight="24.0" prefWidth="200.0" promptText="Enter title..." />
-      <DatePicker fx:id="datePicker" layoutX="62.0" layoutY="270.0" prefHeight="24.0" prefWidth="200.0" promptText="Choose publication date..." />
-      <Spinner fx:id="pageCountSpinner" editable="true" layoutX="62.0" layoutY="331.0" prefHeight="24.0" prefWidth="200.0" />
-      <TextField fx:id="publisherField" layoutX="299.0" layoutY="146.0" prefHeight="24.0" prefWidth="200.0" promptText="Enter publisher..." />
-      <TextField fx:id="authorField" layoutX="299.0" layoutY="84.0" prefHeight="24.0" prefWidth="200.0" promptText="Enter author..." />
-      <TextArea fx:id="summaryField" layoutX="61.0" layoutY="453.0" prefHeight="177.0" prefWidth="659.0" promptText="Enter summary..." />
-      <TextField fx:id="identificationNumberField" layoutX="62.0" layoutY="84.0" prefHeight="24.0" prefWidth="200.0" promptText="Enter identification number..." />
-      <ComboBox fx:id="languageComboBox" layoutX="62.0" layoutY="208.0" prefHeight="24.0" prefWidth="200.0" promptText="Choose language..." />
-      <ComboBox fx:id="formatComboBox" layoutX="299.0" layoutY="208.0" prefHeight="24.0" prefWidth="200.0" promptText="Choose format..." />
-      <ComboBox fx:id="demographicComboBox" layoutX="299.0" layoutY="270.0" prefHeight="24.0" prefWidth="200.0" promptText="Choose demographic..." />
-      <CheckBox fx:id="colorizedCheckBox" layoutX="334.0" layoutY="331.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="114.0" text="Is it colorized?" />
-      <TextField fx:id="issueNumberField" layoutX="522.0" layoutY="84.0" prefHeight="24.0" prefWidth="200.0" promptText="Enter issue number..." />
-      <TextField fx:id="editorField" layoutX="522.0" layoutY="146.0" prefHeight="24.0" prefWidth="200.0" promptText="Enter editor..." />
-      <ComboBox fx:id="frequencyComboBox" layoutX="522.0" layoutY="208.0" prefHeight="24.0" prefWidth="200.0" promptText="Choose release frequency..." />
-      <Label layoutX="62.0" layoutY="310.0" text="Page count">
+      <TextField fx:id="titleField" layoutX="60.0" layoutY="127.0" prefHeight="24.0" prefWidth="200.0" promptText="Enter title..." />
+      <DatePicker fx:id="datePicker" layoutX="61.0" layoutY="251.0" prefHeight="24.0" prefWidth="200.0" promptText="Choose publication date..." />
+      <Spinner fx:id="pageCountSpinner" editable="true" layoutX="61.0" layoutY="312.0" prefHeight="24.0" prefWidth="200.0" />
+      <TextField fx:id="publisherField" layoutX="298.0" layoutY="127.0" prefHeight="24.0" prefWidth="200.0" promptText="Enter publisher..." />
+      <TextField fx:id="authorField" layoutX="298.0" layoutY="65.0" prefHeight="24.0" prefWidth="200.0" promptText="Enter author..." />
+      <TextArea fx:id="summaryField" layoutX="60.0" layoutY="434.0" prefHeight="177.0" prefWidth="659.0" promptText="Enter summary..." />
+      <TextField fx:id="identificationNumberField" layoutX="61.0" layoutY="65.0" prefHeight="24.0" prefWidth="200.0" promptText="Enter identification number..." />
+      <ComboBox fx:id="languageComboBox" layoutX="61.0" layoutY="189.0" prefHeight="24.0" prefWidth="200.0" promptText="Choose language..." />
+      <ComboBox fx:id="formatComboBox" layoutX="298.0" layoutY="189.0" prefHeight="24.0" prefWidth="200.0" promptText="Choose format..." />
+      <ComboBox fx:id="demographicComboBox" layoutX="298.0" layoutY="251.0" prefHeight="24.0" prefWidth="200.0" promptText="Choose demographic..." />
+      <CheckBox fx:id="colorizedCheckBox" layoutX="333.0" layoutY="312.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="114.0" text="Is it colorized?" />
+      <TextField fx:id="issueNumberField" layoutX="521.0" layoutY="65.0" prefHeight="24.0" prefWidth="200.0" promptText="Enter issue number..." />
+      <TextField fx:id="editorField" layoutX="521.0" layoutY="127.0" prefHeight="24.0" prefWidth="200.0" promptText="Enter editor..." />
+      <ComboBox fx:id="frequencyComboBox" layoutX="521.0" layoutY="189.0" prefHeight="24.0" prefWidth="200.0" promptText="Choose release frequency..." />
+      <Label layoutX="61.0" layoutY="291.0" text="Page count">
          <font>
             <Font name="System Bold" size="13.0" />
          </font>
       </Label>
-      <Label layoutX="62.0" layoutY="249.0" text="Publication date">
+      <Label layoutX="61.0" layoutY="230.0" text="Publication date">
          <font>
             <Font name="System Bold" size="13.0" />
          </font>
       </Label>
-      <Label layoutX="61.0" layoutY="186.0" text="Language">
+      <Label layoutX="60.0" layoutY="167.0" text="Language">
          <font>
             <Font name="System Bold" size="13.0" />
          </font>
       </Label>
-      <Label layoutX="61.0" layoutY="126.0" text="Title">
+      <Label layoutX="60.0" layoutY="107.0" text="Title">
          <font>
             <Font name="System Bold" size="13.0" />
          </font>
       </Label>
-      <Label layoutX="62.0" layoutY="62.0" text="Identification number">
+      <Label layoutX="61.0" layoutY="43.0" text="Identification number">
          <font>
             <Font name="System Bold" size="13.0" />
          </font>
       </Label>
-      <Button fx:id="genreChooserButton" layoutX="522.0" layoutY="270.0" mnemonicParsing="false" onAction="#openGenreChooser" prefHeight="24.0" prefWidth="200.0" text="Choose genre..." />
-      <Button layoutX="243.0" layoutY="652.0" mnemonicParsing="false" onAction="#confirmAction" text="OK" />
-      <Button layoutX="480.0" layoutY="652.0" mnemonicParsing="false" onAction="#exitProductInfo" text="Close" />
-      <TextField fx:id="volumeNumberField" layoutX="522.0" layoutY="331.0" prefHeight="24.0" prefWidth="200.0" promptText="Enter volume number..." />
-      <TextField fx:id="illustratorField" layoutX="62.0" layoutY="392.0" prefHeight="24.0" prefWidth="200.0" promptText="Enter illustrator..." />
-      <Label layoutX="64.0" layoutY="371.0" text="Illustrator">
+      <Button fx:id="genreChooserButton" layoutX="521.0" layoutY="251.0" mnemonicParsing="false" onAction="#openGenreChooser" prefHeight="24.0" prefWidth="200.0" text="Choose genre..." />
+      <Button layoutX="242.0" layoutY="633.0" mnemonicParsing="false" onAction="#confirmAction" text="OK" />
+      <Button layoutX="479.0" layoutY="633.0" mnemonicParsing="false" onAction="#exitProductInfo" text="Close" />
+      <TextField fx:id="volumeNumberField" layoutX="521.0" layoutY="312.0" prefHeight="24.0" prefWidth="200.0" promptText="Enter volume number..." />
+      <TextField fx:id="illustratorField" layoutX="61.0" layoutY="373.0" prefHeight="24.0" prefWidth="200.0" promptText="Enter illustrator..." />
+      <Label layoutX="63.0" layoutY="352.0" text="Illustrator">
          <font>
             <Font name="System Bold" size="13.0" />
          </font>
       </Label>
-      <Label layoutX="363.0" layoutY="422.0" text="Summary" />
-      <ComboBox fx:id="publicationStatusComboBox" layoutX="299.0" layoutY="392.0" prefHeight="24.0" prefWidth="200.0" promptText="Choose publication status..." />
-      <Label layoutX="299.0" layoutY="371.0" text="Status">
+      <Label layoutX="362.0" layoutY="403.0" text="Summary" />
+      <Label layoutX="298.0" layoutY="43.0" text="Author">
          <font>
             <Font name="System Bold" size="13.0" />
          </font>
       </Label>
-      <Label layoutX="299.0" layoutY="62.0" text="Author">
+      <Label layoutX="298.0" layoutY="107.0" text="Publisher">
          <font>
             <Font name="System Bold" size="13.0" />
          </font>
       </Label>
-      <Label layoutX="299.0" layoutY="126.0" text="Publisher">
+      <Label layoutX="298.0" layoutY="167.0" text="Book format">
          <font>
             <Font name="System Bold" size="13.0" />
          </font>
       </Label>
-      <Label layoutX="299.0" layoutY="186.0" text="Book format">
+      <Label layoutX="298.0" layoutY="230.0" text="Demographic">
          <font>
             <Font name="System Bold" size="13.0" />
          </font>
       </Label>
-      <Label layoutX="299.0" layoutY="249.0" text="Demographic">
+      <Label layoutX="521.0" layoutY="43.0" text="Issue number">
          <font>
             <Font name="System Bold" size="13.0" />
          </font>
       </Label>
-      <Label layoutX="522.0" layoutY="62.0" text="Issue number">
+      <Label layoutX="521.0" layoutY="107.0" text="Editor">
          <font>
             <Font name="System Bold" size="13.0" />
          </font>
       </Label>
-      <Label layoutX="522.0" layoutY="126.0" text="Editor">
+      <Label layoutX="521.0" layoutY="167.0" text="Release frequency">
          <font>
             <Font name="System Bold" size="13.0" />
          </font>
       </Label>
-      <Label layoutX="522.0" layoutY="186.0" text="Release frequency">
+      <Label layoutX="521.0" layoutY="230.0" text="Genres">
          <font>
             <Font name="System Bold" size="13.0" />
          </font>
       </Label>
-      <Label layoutX="522.0" layoutY="249.0" text="Genres">
-         <font>
-            <Font name="System Bold" size="13.0" />
-         </font>
-      </Label>
-      <Label layoutX="522.0" layoutY="310.0" text="Volume number">
+      <Label layoutX="521.0" layoutY="291.0" text="Volume number">
          <font>
             <Font name="System Bold" size="13.0" />
          </font>
