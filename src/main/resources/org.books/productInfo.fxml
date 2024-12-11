@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="productInfoPane" prefHeight="699.0" prefWidth="781.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.books.fxControllers.ProductInfo">
+<AnchorPane fx:id="productInfoPane" prefHeight="699.0" prefWidth="781.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.books.fxControllers.ProductInfo">
    <children>
       <Label fx:id="itemNameLabel" layoutX="237.0" layoutY="35.0" text="Editing: " visible="false" />
       <Label fx:id="addPublicationLabel" contentDisplay="BOTTOM" layoutX="62.0" layoutY="25.0" prefHeight="21.0" prefWidth="152.0" text="New Publication:" textAlignment="JUSTIFY">
@@ -68,5 +68,56 @@
          </font>
       </Label>
       <Label layoutX="363.0" layoutY="422.0" text="Summary" />
+      <ComboBox fx:id="publicationStatusComboBox" layoutX="299.0" layoutY="392.0" prefHeight="24.0" prefWidth="200.0" promptText="Choose publication status..." />
+      <Label layoutX="299.0" layoutY="371.0" text="Status">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label layoutX="299.0" layoutY="62.0" text="Author">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label layoutX="299.0" layoutY="126.0" text="Publisher">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label layoutX="299.0" layoutY="186.0" text="Book format">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label layoutX="299.0" layoutY="249.0" text="Demographic">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label layoutX="522.0" layoutY="62.0" text="Issue number">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label layoutX="522.0" layoutY="126.0" text="Editor">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label layoutX="522.0" layoutY="186.0" text="Release frequency">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label layoutX="522.0" layoutY="249.0" text="Genres">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label layoutX="522.0" layoutY="310.0" text="Volume number">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

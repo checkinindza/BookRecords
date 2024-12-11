@@ -98,14 +98,14 @@
             <content>
               <AnchorPane fx:id="publicationsPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <ListView fx:id="publicationsListField" layoutX="33.0" layoutY="82.0" prefHeight="349.0" prefWidth="800.0" />
-                        <ComboBox fx:id="publicationTypeComboBox" layoutX="435.0" layoutY="28.0" onAction="#loadPublicationList" prefWidth="150.0" />
-                        <Label layoutX="278.0" layoutY="32.0" text="Choose publication type:" />
-                        <Button layoutX="247.0" layoutY="459.0" mnemonicParsing="false" onAction="#openAddWindow" text="Add" />
-                        <Button layoutX="391.0" layoutY="459.0" mnemonicParsing="false" onAction="#updatePublication" text="Update" />
-                        <Button layoutX="557.0" layoutY="459.0" mnemonicParsing="false" onAction="#deletePublication" text="Delete" />
-                        <Label fx:id="typeNotSelectedWarningLabel" layoutX="607.0" layoutY="30.0" text="You have to select a type!" textFill="RED" visible="false" />
-                        <Label fx:id="publicationNotSelectedWarningLabel" layoutX="607.0" layoutY="30.0" text="You haven't selected a publication!" textFill="RED" visible="false" />
+                        <ListView fx:id="publicationsListField" layoutX="33.0" layoutY="82.0" prefHeight="349.0" prefWidth="1003.0" />
+                        <ComboBox fx:id="publicationTypeComboBox" layoutX="477.0" layoutY="27.0" onAction="#loadPublicationList" prefWidth="150.0" />
+                        <Label layoutX="320.0" layoutY="31.0" text="Choose publication type:" />
+                        <Button layoutX="345.0" layoutY="461.0" mnemonicParsing="false" onAction="#openAddWindow" text="Add" />
+                        <Button layoutX="489.0" layoutY="461.0" mnemonicParsing="false" onAction="#updatePublication" text="Update" />
+                        <Button layoutX="655.0" layoutY="461.0" mnemonicParsing="false" onAction="#deletePublication" text="Delete" />
+                        <Label fx:id="typeNotSelectedWarningLabel" layoutX="649.0" layoutY="29.0" text="You have to select a type!" textFill="RED" visible="false" />
+                        <Label fx:id="publicationNotSelectedWarningLabel" layoutX="649.0" layoutY="29.0" text="You haven't selected a publication!" textFill="RED" visible="false" />
                      </children></AnchorPane>
             </content>
           </Tab>
