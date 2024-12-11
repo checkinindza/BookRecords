@@ -480,8 +480,13 @@ public class Main implements Initializable {
                 private final Button deleteButton = new Button("Delete"); {
                     deleteButton.setOnAction(event -> {
                         AdminPublicationsTableParameters row = getTableView().getItems().get(getIndex());
-                        hibernate.delete(Publication.class, row.getId());
-                        fillAdminPublicationsTablePerSelectedType();
+                        if (row.getPublicationStatus() == PublicationStatus.AVAILABLE) {
+                            hibernate.delete(Publication.class, row.getId());
+                            fillAdminPublicationsTablePerSelectedType();
+                            return;
+                        } else {
+                            FxUtils.generateAlertWithoutHeader(Alert.AlertType.ERROR, "Error", "You cannot delete a book that is not available");
+                        }
                     });
                 }
                 @Override
