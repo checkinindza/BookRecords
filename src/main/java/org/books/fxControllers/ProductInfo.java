@@ -65,6 +65,8 @@ public class ProductInfo implements Initializable {
     public TextField illustratorField;
     @FXML
     public Button genreChooserButton;
+    @FXML
+    public ComboBox<PublicationStatus> publicationStatusComboBox;
 
     DataPopulator dataPopulator = new DataPopulator();
     DataTransfer dataTransfer = DataTransfer.getInstance();
@@ -108,6 +110,7 @@ public class ProductInfo implements Initializable {
         dataPopulator.fillComboBoxWithEnums(Format.class, formatComboBox);
         dataPopulator.fillComboBoxWithEnums(Demographic.class, demographicComboBox);
         dataPopulator.fillComboBoxWithEnums(Frequency.class, frequencyComboBox);
+        dataPopulator.fillComboBoxWithEnums(PublicationStatus.class, publicationStatusComboBox);
     }
 
     public void disableFields() {
@@ -149,13 +152,47 @@ public class ProductInfo implements Initializable {
         }
 
         if (dataTransfer.getText().equals("Manga")) {
-            Manga manga = new Manga(titleField.getText(), languageComboBox.getSelectionModel().getSelectedItem(), datePicker.getValue(), pageCountSpinner.getValue(), publisherField.getText(), identificationNumberField.getText(), summaryField.getText(), Integer.parseInt(identificationNumberField.getText()), illustratorField.getText(), Integer.parseInt(volumeNumberField.getText()), demographicComboBox.getSelectionModel().getSelectedItem(), (List<MangaGenre>) (List<?>) selectedGenresHolder.getSelectedGenres(), colorizedCheckBox.isSelected());
+            Manga manga = new Manga(titleField.getText(),
+                    languageComboBox.getSelectionModel().getSelectedItem(),
+                    datePicker.getValue(),
+                    pageCountSpinner.getValue(),
+                    publisherField.getText(),
+                    authorField.getText(),
+                    summaryField.getText(),
+                    publicationStatusComboBox.getSelectionModel().getSelectedItem(),
+                    Integer.parseInt(identificationNumberField.getText()),
+                    illustratorField.getText(),
+                    Integer.parseInt(volumeNumberField.getText()),
+                    demographicComboBox.getSelectionModel().getSelectedItem(),
+                    (List<MangaGenre>) (List<?>) selectedGenresHolder.getSelectedGenres(),
+                    colorizedCheckBox.isSelected());
             hibernate.create(manga);
         } else if (dataTransfer.getText().equals("Book")) {
-            Book book = new Book(titleField.getText(), languageComboBox.getSelectionModel().getSelectedItem(), datePicker.getValue(), pageCountSpinner.getValue(), publisherField.getText(), authorField.getText(), summaryField.getText(), Integer.parseInt(identificationNumberField.getText()), (List<BookGenre>) (List<?>) selectedGenresHolder.getSelectedGenres(), formatComboBox.getSelectionModel().getSelectedItem());
+            Book book = new Book(titleField.getText(),
+                    languageComboBox.getSelectionModel().getSelectedItem(),
+                    datePicker.getValue(),
+                    pageCountSpinner.getValue(),
+                    publisherField.getText(),
+                    authorField.getText(),
+                    summaryField.getText(),
+                    publicationStatusComboBox.getSelectionModel().getSelectedItem(),
+                    Integer.parseInt(identificationNumberField.getText()),
+                    formatComboBox.getSelectionModel().getSelectedItem(),
+                    (List<BookGenre>) (List<?>) selectedGenresHolder.getSelectedGenres());
             hibernate.create(book);
         } else if (dataTransfer.getText().equals("Periodical")) {
-            Periodical periodical = new Periodical(titleField.getText(), languageComboBox.getSelectionModel().getSelectedItem(), datePicker.getValue(), pageCountSpinner.getValue(), publisherField.getText(), authorField.getText(), summaryField.getText(), Integer.parseInt(identificationNumberField.getText()), Integer.parseInt(issueNumberField.getText()), editorField.getText(), frequencyComboBox.getSelectionModel().getSelectedItem());
+            Periodical periodical = new Periodical(titleField.getText(),
+                    languageComboBox.getSelectionModel().getSelectedItem(),
+                    datePicker.getValue(),
+                    pageCountSpinner.getValue(),
+                    publisherField.getText(),
+                    authorField.getText(),
+                    summaryField.getText(),
+                    publicationStatusComboBox.getSelectionModel().getSelectedItem(),
+                    Integer.parseInt(identificationNumberField.getText()),
+                    Integer.parseInt(issueNumberField.getText()),
+                    editorField.getText(),
+                    frequencyComboBox.getSelectionModel().getSelectedItem());
             hibernate.create(periodical);
         }
 
@@ -179,6 +216,7 @@ public class ProductInfo implements Initializable {
         latestPublication.setPublisher(publisherField.getText());
         latestPublication.setAuthor(authorField.getText());
         latestPublication.setSummary(summaryField.getText());
+        latestPublication.setPublicationStatus(publicationStatusComboBox.getSelectionModel().getSelectedItem());
 
         if (latestPublication instanceof Manga) {
             Manga manga = (Manga) latestPublication;

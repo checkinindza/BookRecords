@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.books.Model.enums.Format;
 import org.books.Model.enums.BookGenre;
 import org.books.Model.enums.Language;
+import org.books.Model.enums.PublicationStatus;
 import org.books.utils.BookGenreConverter;
 
 import java.time.LocalDate;
@@ -27,11 +28,11 @@ public class Book extends Publication {
     @Enumerated(EnumType.STRING)
     private Format format;
 
-    public Book(String title, Language language, LocalDate publicationDate, int pageCount, String publisher, String author, String summary, int isbn, List<BookGenre> bookGenre, Format format) {
-        super(title, language, publicationDate, pageCount, publisher, author, summary);
+    public Book(String title, Language language, LocalDate publicationDate, int pageCount, String publisher, String author, String summary, PublicationStatus publicationStatus, int isbn, Format format, List<BookGenre> bookGenre) {
+        super(title, language, publicationDate, pageCount, publisher, author, summary, publicationStatus);
         this.isbn = isbn;
-        this.bookGenre = bookGenre;
         this.format = format;
+        this.bookGenre = bookGenre;
     }
 
     public List<BookGenre> getBookGenres() {

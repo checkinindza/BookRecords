@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.books.Model.enums.Frequency;
 import org.books.Model.enums.Language;
+import org.books.Model.enums.PublicationStatus;
 
 import java.time.LocalDate;
 
@@ -25,8 +26,8 @@ public class Periodical extends Publication {
     @Enumerated(EnumType.STRING)
     private Frequency frequency;
 
-    public Periodical(String title, Language language, LocalDate publicationDate, int pageCount, String publisher, String author, String summary, int issn, int issueNumber, String editor, Frequency frequency) {
-        super(title, language, publicationDate, pageCount, publisher, author, summary);
+    public Periodical(String title, Language language, LocalDate publicationDate, int pageCount, String publisher, String author, String summary, PublicationStatus publicationStatus, int issn, int issueNumber, String editor, Frequency frequency) {
+        super(title, language, publicationDate, pageCount, publisher, author, summary, publicationStatus);
         this.issn = issn;
         this.issueNumber = issueNumber;
         this.editor = editor;

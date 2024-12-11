@@ -38,7 +38,7 @@ public abstract class Publication {
     protected String dtype;
     protected LocalDate requestDate;
 
-    public Publication(String title, Language language, LocalDate publicationDate, int pageCount, String publisher, String author, String summary) {
+    public Publication(String title, Language language, LocalDate publicationDate, int pageCount, String publisher, String author, String summary, PublicationStatus publicationStatus) {
         this.title = title;
         this.language = language;
         this.publicationDate = publicationDate;
@@ -46,6 +46,7 @@ public abstract class Publication {
         this.publisher = publisher;
         this.author = author;
         this.summary = summary;
+        this.publicationStatus = publicationStatus;
     }
 
     @Override
