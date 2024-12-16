@@ -33,4 +33,12 @@ public class Periodical extends Publication {
         this.editor = editor;
         this.frequency = frequency;
     }
+
+    public Periodical(String title, Language language, LocalDate publicationDate, int pageCount, String publisher, String author, String summary, PublicationStatus publicationStatus, Client owner, int issn, int issueNumber, String editor, Frequency frequency) {
+        super(pageCount, title, publicationDate, publisher, author, summary, publicationStatus, language, owner);
+        this.issn = issn;
+        this.issueNumber = issueNumber;
+        this.editor = editor;
+        this.frequency = frequency;
+    }
 }

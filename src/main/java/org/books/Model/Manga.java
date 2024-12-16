@@ -41,6 +41,16 @@ public class Manga extends Publication {
         this.isColor = isColor;
     }
 
+    public Manga(String title, Language language, LocalDate publicationDate, int pageCount, String publisher, String author, String summary, PublicationStatus publicationStatus, Client owner, int jan, String illustrator, int volumeNumber, Demographic demographic, List<MangaGenre> mangaGenres, boolean isColor) {
+        super(pageCount, title, publicationDate, publisher, author, summary, publicationStatus, language, owner);
+        this.jan = jan;
+        this.illustrator = illustrator;
+        this.volumeNumber = volumeNumber;
+        this.demographic = demographic;
+        this.mangaGenres = mangaGenres;
+        this.isColor = isColor;
+    }
+
     public boolean getIsColor() {
         return this.isColor;
     }

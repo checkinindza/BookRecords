@@ -6,10 +6,7 @@ import jakarta.persistence.Query;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
-import org.books.Model.Comment;
-import org.books.Model.PeriodicRecord;
-import org.books.Model.Publication;
-import org.books.Model.User;
+import org.books.Model.*;
 import org.books.Model.enums.PublicationStatus;
 import org.books.utils.PasswordUtils;
 
@@ -21,13 +18,11 @@ public class CustomHibernate extends GenericHibernate {
     public CustomHibernate(EntityManagerFactory entityManagerFactory) {
         super(entityManagerFactory);
     }
-
-    EntityManager entityManager = entityManagerFactory.createEntityManager();
-
     public User getUserByCredentials(String username, String password) {
         User user = null;
 
         try {
+            entityManager = entityManagerFactory.createEntityManager();
             CriteriaBuilder cb = entityManager.getCriteriaBuilder();
             CriteriaQuery<User> query = cb.createQuery(User.class);
             Root<User> root = query.from(User.class);
@@ -47,6 +42,7 @@ public class CustomHibernate extends GenericHibernate {
     public List<Publication> getAvailablePublications(User user) {
         List<Publication> publications = new ArrayList<>();
         try {
+            entityManager = entityManagerFactory.createEntityManager();
             CriteriaBuilder cb = entityManager.getCriteriaBuilder();
             CriteriaQuery<Publication> query = cb.createQuery(Publication.class);
             Root<Publication> root = query.from(Publication.class);
@@ -63,6 +59,7 @@ public class CustomHibernate extends GenericHibernate {
     public List<Publication> getBorrowedPublications(User user) {
         List<Publication> publications = new ArrayList<>();
         try {
+            entityManager = entityManagerFactory.createEntityManager();
             CriteriaBuilder cb = entityManager.getCriteriaBuilder();
             CriteriaQuery<Publication> query = cb.createQuery(Publication.class);
             Root<Publication> root = query.from(Publication.class);
@@ -76,30 +73,10 @@ public class CustomHibernate extends GenericHibernate {
         return publications;
     }
 
-    public void deleteComment(int id) {
-        try {
-            entityManager.getTransaction().begin();
-            var comment = entityManager.find(Comment.class, id);
-
-            if (comment.getParentComment() != null) {
-                Comment parentComment = entityManager.find(Comment.class, comment.getParentComment().getId());
-                parentComment.getReplies().remove(comment);
-                entityManager.merge(parentComment);
-            }
-
-            comment.getReplies().clear();
-            entityManager.getTransaction().commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (entityManager != null) entityManager.close();
-        }
-    }
-
     public List<Publication> getUserPublications(User user) {
         List<Publication> publications = new ArrayList<>();
         try {
-            entityManager.clear();
+            entityManager = entityManagerFactory.createEntityManager();
             CriteriaBuilder cb = entityManager.getCriteriaBuilder();
             CriteriaQuery<Publication> query = cb.createQuery(Publication.class);
             Root<Publication> root = query.from(Publication.class);
@@ -138,6 +115,7 @@ public class CustomHibernate extends GenericHibernate {
     public <T> List<T> getRecordsByCriteria(Class<T> entityClass, String criteria, String compareTo) {
         List<T> list = new ArrayList<>();
         try {
+            entityManager = entityManagerFactory.createEntityManager();
             CriteriaBuilder cb = entityManager.getCriteriaBuilder();
             CriteriaQuery<T> cq = cb.createQuery(entityClass);
             Root<T> rootEntry = cq.from(entityClass);
@@ -155,7 +133,7 @@ public class CustomHibernate extends GenericHibernate {
         Publication publication = null;
 
         try {
-            entityManager.clear();
+            entityManager = entityManagerFactory.createEntityManager();
             CriteriaBuilder cb = entityManager.getCriteriaBuilder();
             CriteriaQuery<Publication> queryPublication = cb.createQuery(Publication.class);
             Root<Publication> rootPublication = queryPublication.from(Publication.class);
@@ -176,5 +154,57 @@ public class CustomHibernate extends GenericHibernate {
         }
 
         return user;
+    }
+
+    public void deleteComment(int id) {
+        try {
+            entityManager = entityManagerFactory.createEntityManager();
+            entityManager.getTransaction().begin();
+            var comment = entityManager.find(Comment.class, id);
+            if (comment.getParentComment() != null) {
+                Comment parentComment = entityManager.find(Comment.class, comment.getParentComment().getId());
+                parentComment.getReplies().remove(comment);
+                entityManager.merge(parentComment);
+            }
+            comment.getReplies().clear();
+            entityManager.getTransaction().commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (entityManager != null) entityManager.close();
+        }
+    }
+
+    public void deletePublication(int id) {
+        try {
+            entityManager = entityManagerFactory.createEntityManager();
+            entityManager.getTransaction().begin();
+            Publication publication = entityManager.find(Publication.class, id);
+            Client client;
+            if (publication != null) {
+                if (publication.getOwner() != null) {
+                    client = publication.getOwner();
+                    publication.setOwner(null);
+                    client.getOwnedPublications().remove(publication);
+                    entityManager.merge(client);
+                }
+                if (publication.getRecords() != null) {
+                    for (PeriodicRecord record : publication.getRecords()) {
+                        entityManager.remove(record);
+                    }
+                    publication.getRecords().clear();
+                }
+                entityManager.flush();
+                publication = entityManager.find(Publication.class, id);
+                if (publication != null) {
+                    entityManager.remove(publication);
+                }
+            }
+            entityManager.getTransaction().commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (entityManager != null) entityManager.close();
+        }
     }
 }

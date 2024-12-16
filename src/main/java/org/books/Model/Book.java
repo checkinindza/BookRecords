@@ -35,6 +35,13 @@ public class Book extends Publication {
         this.bookGenre = bookGenre;
     }
 
+    public Book(String title, Language language, LocalDate publicationDate, int pageCount, String publisher, String author, String summary, PublicationStatus publicationStatus, Client owner, int isbn, Format format, List<BookGenre> bookGenre) {
+        super(pageCount, title, publicationDate, publisher, author, summary, publicationStatus, language, owner);
+        this.isbn = isbn;
+        this.bookGenre = bookGenre;
+        this.format = format;
+    }
+
     public List<BookGenre> getBookGenres() {
         return this.bookGenre;
     }

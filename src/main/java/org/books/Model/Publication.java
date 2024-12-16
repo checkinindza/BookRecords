@@ -38,7 +38,7 @@ public abstract class Publication {
     protected PublicationStatus publicationStatus;
     @Enumerated(EnumType.STRING)
     protected Language language;
-    @OneToMany(mappedBy = "publication", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "publication", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     protected List<PeriodicRecord> records;
 
     public Publication(String title, Language language, LocalDate publicationDate, int pageCount, String publisher, String author, String summary, PublicationStatus publicationStatus) {
@@ -50,6 +50,18 @@ public abstract class Publication {
         this.author = author;
         this.summary = summary;
         this.publicationStatus = publicationStatus;
+    }
+
+    public Publication(int pageCount, String title, LocalDate publicationDate, String publisher, String author, String summary, PublicationStatus publicationStatus, Language language, Client owner) {
+        this.pageCount = pageCount;
+        this.title = title;
+        this.publicationDate = publicationDate;
+        this.publisher = publisher;
+        this.author = author;
+        this.summary = summary;
+        this.publicationStatus = publicationStatus;
+        this.language = language;
+        this.owner = owner;
     }
 
     @Override

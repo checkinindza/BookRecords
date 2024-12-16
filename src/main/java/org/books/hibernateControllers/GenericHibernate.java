@@ -86,9 +86,10 @@ public class GenericHibernate {
             entityManager = entityManagerFactory.createEntityManager();
             entityManager.getTransaction().begin();
             T entity = entityManager.find(entityClass, id);
-            entityManager.remove(entity);
+            if (entity != null) {
+                entityManager.remove(entity);
+            }
             entityManager.getTransaction().commit();
-            // FxUtils.generateAlertWithoutHeader(Alert.AlertType.INFORMATION, "Success", "Publication deleted successfully");
         } catch (Exception e) {
             FxUtils.generateAlertWithoutHeader(Alert.AlertType.ERROR, "Error", "Error during DELETE operation");
         } finally {

@@ -105,12 +105,12 @@ public class ProductInfo implements Initializable {
     }
 
     public void disableFields() {
-        if (publication instanceof Manga) {
+        if (publication instanceof Manga || "Manga".equals(dataTransfer.getData())) {
             issueNumberField.setDisable(true);
             editorField.setDisable(true);
             formatComboBox.setDisable(true);
             frequencyComboBox.setDisable(true);
-        } else if (publication instanceof Book) {
+        } else if (publication instanceof Book || "Book".equals(dataTransfer.getData())) {
             volumeNumberField.setDisable(true);
             illustratorField.setDisable(true);
             colorizedCheckBox.setDisable(true);
@@ -118,7 +118,7 @@ public class ProductInfo implements Initializable {
             issueNumberField.setDisable(true);
             editorField.setDisable(true);
             frequencyComboBox.setDisable(true);
-        } else if (publication instanceof Periodical) {
+        } else if (publication instanceof Periodical || "Periodical".equals(dataTransfer.getData())) {
             volumeNumberField.setDisable(true);
             illustratorField.setDisable(true);
             colorizedCheckBox.setDisable(true);
@@ -141,50 +141,101 @@ public class ProductInfo implements Initializable {
         if (isInputEmpty()) {
             return;
         }
-
         if (dataTransfer.getData().equals("Manga")) {
-            Manga manga = new Manga(titleField.getText(),
-                    languageComboBox.getSelectionModel().getSelectedItem(),
-                    datePicker.getValue(),
-                    pageCountSpinner.getValue(),
-                    publisherField.getText(),
-                    authorField.getText(),
-                    summaryField.getText(),
-                    PublicationStatus.AVAILABLE,
-                    Integer.parseInt(identificationNumberField.getText()),
-                    illustratorField.getText(),
-                    Integer.parseInt(volumeNumberField.getText()),
-                    demographicComboBox.getSelectionModel().getSelectedItem(),
-                    (List<MangaGenre>) (List<?>) selectedGenresHolder.getSelectedGenres(),
-                    colorizedCheckBox.isSelected());
-            hibernate.create(manga);
+            if (dataTransfer.getUser() instanceof Client) {
+                Manga manga = new Manga(titleField.getText(),
+                        languageComboBox.getSelectionModel().getSelectedItem(),
+                        datePicker.getValue(),
+                        pageCountSpinner.getValue(),
+                        publisherField.getText(),
+                        authorField.getText(),
+                        summaryField.getText(),
+                        PublicationStatus.AVAILABLE,
+                        (Client) dataTransfer.getUser(),
+                        Integer.parseInt(identificationNumberField.getText()),
+                        illustratorField.getText(),
+                        Integer.parseInt(volumeNumberField.getText()),
+                        demographicComboBox.getSelectionModel().getSelectedItem(),
+                        (List<MangaGenre>) (List<?>) selectedGenresHolder.getSelectedGenres(),
+                        colorizedCheckBox.isSelected());
+                hibernate.create(manga);
+            } else {
+                Manga manga = new Manga(titleField.getText(),
+                        languageComboBox.getSelectionModel().getSelectedItem(),
+                        datePicker.getValue(),
+                        pageCountSpinner.getValue(),
+                        publisherField.getText(),
+                        authorField.getText(),
+                        summaryField.getText(),
+                        PublicationStatus.AVAILABLE,
+                        Integer.parseInt(identificationNumberField.getText()),
+                        illustratorField.getText(),
+                        Integer.parseInt(volumeNumberField.getText()),
+                        demographicComboBox.getSelectionModel().getSelectedItem(),
+                        (List<MangaGenre>) (List<?>) selectedGenresHolder.getSelectedGenres(),
+                        colorizedCheckBox.isSelected());
+                hibernate.create(manga);
+            }
         } else if (dataTransfer.getData().equals("Book")) {
-            Book book = new Book(titleField.getText(),
-                    languageComboBox.getSelectionModel().getSelectedItem(),
-                    datePicker.getValue(),
-                    pageCountSpinner.getValue(),
-                    publisherField.getText(),
-                    authorField.getText(),
-                    summaryField.getText(),
-                    PublicationStatus.AVAILABLE,
-                    Integer.parseInt(identificationNumberField.getText()),
-                    formatComboBox.getSelectionModel().getSelectedItem(),
-                    (List<BookGenre>) (List<?>) selectedGenresHolder.getSelectedGenres());
-            hibernate.create(book);
+            if (dataTransfer.getUser() instanceof Client) {
+                Book book = new Book(titleField.getText(),
+                        languageComboBox.getSelectionModel().getSelectedItem(),
+                        datePicker.getValue(),
+                        pageCountSpinner.getValue(),
+                        publisherField.getText(),
+                        authorField.getText(),
+                        summaryField.getText(),
+                        PublicationStatus.AVAILABLE,
+                        (Client) dataTransfer.getUser(),
+                        Integer.parseInt(identificationNumberField.getText()),
+                        formatComboBox.getSelectionModel().getSelectedItem(),
+                        (List<BookGenre>) (List<?>) selectedGenresHolder.getSelectedGenres());
+                hibernate.create(book);
+            } else {
+                Book book = new Book(titleField.getText(),
+                        languageComboBox.getSelectionModel().getSelectedItem(),
+                        datePicker.getValue(),
+                        pageCountSpinner.getValue(),
+                        publisherField.getText(),
+                        authorField.getText(),
+                        summaryField.getText(),
+                        PublicationStatus.AVAILABLE,
+                        Integer.parseInt(identificationNumberField.getText()),
+                        formatComboBox.getSelectionModel().getSelectedItem(),
+                        (List<BookGenre>) (List<?>) selectedGenresHolder.getSelectedGenres());
+                hibernate.create(book);
+            }
         } else if (dataTransfer.getData().equals("Periodical")) {
-            Periodical periodical = new Periodical(titleField.getText(),
-                    languageComboBox.getSelectionModel().getSelectedItem(),
-                    datePicker.getValue(),
-                    pageCountSpinner.getValue(),
-                    publisherField.getText(),
-                    authorField.getText(),
-                    summaryField.getText(),
-                    PublicationStatus.AVAILABLE,
-                    Integer.parseInt(identificationNumberField.getText()),
-                    Integer.parseInt(issueNumberField.getText()),
-                    editorField.getText(),
-                    frequencyComboBox.getSelectionModel().getSelectedItem());
-            hibernate.create(periodical);
+            if (dataTransfer.getUser() instanceof Client) {
+                Periodical periodical = new Periodical(titleField.getText(),
+                        languageComboBox.getSelectionModel().getSelectedItem(),
+                        datePicker.getValue(),
+                        pageCountSpinner.getValue(),
+                        publisherField.getText(),
+                        authorField.getText(),
+                        summaryField.getText(),
+                        PublicationStatus.AVAILABLE,
+                        (Client) dataTransfer.getUser(),
+                        Integer.parseInt(identificationNumberField.getText()),
+                        Integer.parseInt(issueNumberField.getText()),
+                        editorField.getText(),
+                        frequencyComboBox.getSelectionModel().getSelectedItem());
+                hibernate.create(periodical);
+            } else {
+                Periodical periodical = new Periodical(titleField.getText(),
+                        languageComboBox.getSelectionModel().getSelectedItem(),
+                        datePicker.getValue(),
+                        pageCountSpinner.getValue(),
+                        publisherField.getText(),
+                        authorField.getText(),
+                        summaryField.getText(),
+                        PublicationStatus.AVAILABLE,
+                        Integer.parseInt(identificationNumberField.getText()),
+                        Integer.parseInt(issueNumberField.getText()),
+                        editorField.getText(),
+                        frequencyComboBox.getSelectionModel().getSelectedItem());
+                hibernate.create(periodical);
+            }
         }
 
 
@@ -311,7 +362,7 @@ public class ProductInfo implements Initializable {
             }
         }
 
-        if (isEmpty) FxUtils.generateAlertWithoutHeader(Alert.AlertType.ERROR, "You missed something!", "Error");
+        if (isEmpty) FxUtils.generateAlertWithoutHeader(Alert.AlertType.ERROR, "Error", "You missed something!");
         return isEmpty;
     }
 

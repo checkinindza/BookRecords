@@ -19,13 +19,13 @@ public class Client extends User {
     private String address;
     private LocalDate birthDate;
     private String clientBio;
-    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL , fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL , fetch = FetchType.EAGER, orphanRemoval = true)
     private List<Comment> commentList;
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL , fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL , fetch = FetchType.EAGER, orphanRemoval = true)
     private List<Publication> ownedPublications;
     @OneToMany(mappedBy = "borrowerClient", cascade = CascadeType.ALL , fetch = FetchType.EAGER)
     private List<Publication> borrowedPublications;
-    @OneToMany(mappedBy = "commentOwner", cascade = CascadeType.ALL , fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "commentOwner", cascade = CascadeType.ALL , fetch = FetchType.EAGER, orphanRemoval = true)
     private List<Comment> myComments;
 
     public Client(String login, String password, String name, String surname, String email, String address, LocalDate birthDate, List<Comment> commentList, List<Publication> ownedPublications, List<Publication> borrowedPublications) {

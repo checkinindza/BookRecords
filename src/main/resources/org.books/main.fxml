@@ -100,7 +100,7 @@
                      <children>
                         <ComboBox fx:id="publicationTypeComboBox" layoutX="477.0" layoutY="27.0" onAction="#fillAdminPublicationsTablePerSelectedType" prefWidth="150.0" />
                         <Label layoutX="320.0" layoutY="31.0" text="Choose publication type:" />
-                        <Button layoutX="477.0" layoutY="67.0" mnemonicParsing="false" onAction="#openAddWindow" prefHeight="24.0" prefWidth="152.0" text="Add New Publication" />
+                        <Button layoutX="477.0" layoutY="67.0" mnemonicParsing="false" onAction="#openProductEditWindow" prefHeight="24.0" prefWidth="152.0" text="Add New Publication" />
                         <Label fx:id="typeNotSelectedWarningLabel" layoutX="649.0" layoutY="29.0" text="You have to select a type!" textFill="RED" visible="false" />
                         <TableView fx:id="adminPublicationsTable" layoutX="21.0" layoutY="112.0" prefHeight="452.0" prefWidth="1019.0">
                           <columns>
@@ -150,7 +150,7 @@
                           <columns>
                             <TableColumn fx:id="colBookId" prefWidth="39.0" text="ID" />
                             <TableColumn fx:id="colBookTitle" prefWidth="342.0" text="Title" />
-                              <TableColumn fx:id="colBookUser" prefWidth="205.0" text="User" />
+                              <TableColumn fx:id="colBookUser" prefWidth="205.0" text="Requested By" />
                               <TableColumn fx:id="colBookStatus" prefWidth="115.0" text="Status" />
                               <TableColumn fx:id="colRequestDate" prefWidth="250.0" text="Request Date" />
                               <TableColumn fx:id="colBooksDummy" prefWidth="103.0" text="Action" />
@@ -179,6 +179,15 @@
                               <TableColumn fx:id="colReturnButton" minWidth="0.0" prefWidth="105.0" text="Action" />
                           </columns>
                         </TableView>
+                        <Button layoutX="980.0" layoutY="10.0" mnemonicParsing="false" onAction="#deleteUserPublication" text="Delete" />
+                        <Button layoutX="918.0" layoutY="10.0" mnemonicParsing="false" onAction="#openProductEditWindow" text="Add" />
+                        <ComboBox fx:id="userBooksPublicationTypeComboBox" layoutX="744.0" layoutY="10.0" prefWidth="150.0" />
+                        <Label layoutX="638.0" layoutY="14.0" text="Publication type:" />
+                        <Label fx:id="userTabTypeNotSelectedWarningLabel" layoutX="515.0" layoutY="14.0" text="Type not selected!" textFill="RED" visible="false">
+                           <font>
+                              <Font name="System Bold" size="13.0" />
+                           </font>
+                        </Label>
                      </children></AnchorPane>
               </content>
             </Tab>

@@ -2,6 +2,7 @@ package org.books.fxControllers;
 
 //<editor-fold desc="import zone">
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -165,6 +166,10 @@ public class Main implements Initializable {
     public TableColumn<BookTableParameters, Integer> colBookId;
     @FXML
     public TableColumn colBooksDummy;
+    @FXML
+    public ComboBox<String> userBooksPublicationTypeComboBox;
+    @FXML
+    public Label userTabTypeNotSelectedWarningLabel;
     //</editor-fold>
     //<editor-fold desc="Borrowed books table">
     @FXML
@@ -481,7 +486,7 @@ public class Main implements Initializable {
                     deleteButton.setOnAction(event -> {
                         AdminPublicationsTableParameters row = getTableView().getItems().get(getIndex());
                         if (row.getPublicationStatus() == PublicationStatus.AVAILABLE) {
-                            hibernate.delete(Publication.class, row.getId());
+                            hibernate.deletePublication(row.getId());
                             fillAdminPublicationsTablePerSelectedType();
                             return;
                         } else {
@@ -543,6 +548,7 @@ public class Main implements Initializable {
         this.hibernate = new CustomHibernate(entityManagerFactory);
         dataPopulator.fillTableWithAllRecords(userListField, User.class);
         dataPopulator.fillComboBox(publicationTypeComboBox, dataPopulator.getChildren(Publication.class));
+        dataPopulator.fillComboBox(userBooksPublicationTypeComboBox, dataPopulator.getChildren(Publication.class));
 
         // Priklausomai nuo prisijungusuio, apribojam matomumą
 
@@ -589,7 +595,9 @@ public class Main implements Initializable {
             BookTableParameters bookTableParameters = new BookTableParameters();
             bookTableParameters.setId(publication.getId());
             bookTableParameters.setPublicationTitle(publication.getTitle());
-            bookTableParameters.setPublicationUser(publication.getOwner().getName() + " " + publication.getOwner().getSurname());
+            if (publication.getBorrowerClient() != null) {
+                bookTableParameters.setPublicationUser(publication.getBorrowerClient().getName() + " " + publication.getBorrowerClient().getSurname());
+            }
             bookTableParameters.setPublicationRequestDate(publication.getRequestDate());
             bookTableParameters.setPublicationStatus(publication.getPublicationStatus());
             myBookList.getItems().add(bookTableParameters);
@@ -739,7 +747,7 @@ public class Main implements Initializable {
         }
 
         // Check phone number field
-        if (selectedUser instanceof Admin) {
+        if (adminChk.isSelected()) {
             Pattern phoneNumPattern = Pattern.compile("\\+[0-9]{11}");
             if (!phoneNumPattern.matcher(phoneNum.getText()).matches() || phoneNum.getText().isEmpty()) {
                 isValid = false;
@@ -750,7 +758,7 @@ public class Main implements Initializable {
         }
 
         // Check bdate field
-        if (selectedUser instanceof Client) {
+        if (clientChk.isSelected()) {
             if (bDate.getValue() == null) {
                 isValid = false;
                 bDateFieldCheck.setVisible(true);
@@ -787,16 +795,26 @@ public class Main implements Initializable {
 
     DataTransfer dataTransfer = DataTransfer.getInstance();
 
-    public void openAddWindow() throws IOException {
-        if (!publicationTypeComboBox.getSelectionModel().isEmpty()) {
-            typeNotSelectedWarningLabel.setVisible(false);
-            dataTransfer.setAddWasPressed(true);
-            dataTransfer.setData(publicationTypeComboBox.getValue());
-            dataTransfer.setEntityManagerFactory(entityManagerFactory);
-            StartGUI.newStage("/org.books/productInfo.fxml", "Add publication");
+    public void openProductEditWindow() throws IOException {
+        if (publicationManagementTab.isSelected()) {
+            loadProductEditWindow(typeNotSelectedWarningLabel, publicationTypeComboBox);
             fillAdminPublicationsTablePerSelectedType();
+        } else if (clientBookManagementTab.isSelected()) {
+            loadProductEditWindow(userTabTypeNotSelectedWarningLabel, userBooksPublicationTypeComboBox);
+            fillBookList();
+        }
+    }
+
+    public void loadProductEditWindow(Label label, ComboBox<String> comboBox) throws IOException {
+        if (!comboBox.getSelectionModel().isEmpty()) {
+            label.setVisible(false);
+            dataTransfer.setAddWasPressed(true);
+            dataTransfer.setData(comboBox.getValue());
+            dataTransfer.setEntityManagerFactory(entityManagerFactory);
+            dataTransfer.setUser(currentUser);
+            StartGUI.newStage("/org.books/productInfo.fxml", "Add publication");
         } else {
-            typeNotSelectedWarningLabel.setVisible(true);
+            label.setVisible(true);
         }
     }
 
@@ -854,6 +872,17 @@ public class Main implements Initializable {
 
         PeriodicRecord periodicRecord = new PeriodicRecord((Client) currentUser, publicationFromDb, LocalDate.now(), PublicationStatus.REQUESTED);
         hibernate.create(periodicRecord);
+    }
+
+    public void deleteUserPublication() {
+        BookTableParameters row = myBookList.getSelectionModel().getSelectedItem();
+        if (row.getPublicationStatus() == PublicationStatus.AVAILABLE) {
+            hibernate.deletePublication(row.getId());
+            FxUtils.generateAlertWithoutHeader(Alert.AlertType.INFORMATION, "Success", "Publication deleted successfully");
+            fillBookList();
+        } else {
+            FxUtils.generateAlertWithoutHeader(Alert.AlertType.ERROR, "Error", "You cannot delete a book that is not available");
+        }
     }
     // END OF PUBLICATION TAB
 }

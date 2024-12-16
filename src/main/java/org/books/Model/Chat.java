@@ -20,7 +20,7 @@ public class Chat {
     private int id;
     @ManyToOne
     private Book book;
-    @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> messages;
 
     public Chat(Book book, List<Comment> messages) {

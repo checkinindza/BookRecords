@@ -3,7 +3,7 @@ package org.books.utils;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.Getter;
 import lombok.Setter;
-
+import org.books.Model.User;
 @Setter
 @Getter
 
@@ -13,6 +13,7 @@ public final class DataTransfer {
     private EntityManagerFactory entityManagerFactory;
     private String data;
     private Object object;
+    private User user;
     private final static DataTransfer instance = new DataTransfer();
 
     public static DataTransfer getInstance() {
