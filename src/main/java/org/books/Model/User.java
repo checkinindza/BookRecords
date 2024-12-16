@@ -24,8 +24,10 @@ public abstract class User {
     protected String name;
     protected String surname;
     protected String email;
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL , fetch = FetchType.EAGER, orphanRemoval = true)
-    private List<PeriodicRecord> periodicRecords;
+    @OneToMany(mappedBy = "actionUser", cascade = CascadeType.ALL , fetch = FetchType.EAGER, orphanRemoval = true)
+    private List<PeriodicRecord> actionUserPeriodicRecords;
+    @OneToMany(mappedBy = "borrowerClient", cascade = CascadeType.ALL , fetch = FetchType.EAGER, orphanRemoval = true)
+    private List<PeriodicRecord> borrowerClientPeriodicRecords;
 
     public User(String login, String password, String name, String surname, String email) {
         this.login = login;

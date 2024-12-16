@@ -55,14 +55,14 @@ public class UserReview {
     }
 
     public void insertComment() {
-        if (currentUser instanceof Client client) {
+        if (currentUser instanceof Client) {
 
             Comment selectedComment = userReview.getSelectionModel().getSelectedItem() != null ? userReview.getSelectionModel().getSelectedItem().getValue() : null;
             Comment comment;
             if (selectedComment != null) {
-                comment = new Comment(commentTitle.getText(), commentBody.getText(), selectedComment, client);
+                comment = new Comment(commentTitle.getText(), commentBody.getText(), selectedComment, (Client) currentUser);
             } else {
-                comment = new Comment(commentTitle.getText(), commentBody.getText(), targetClient, client);
+                comment = new Comment(commentTitle.getText(), commentBody.getText(), (Client) currentUser, targetClient);
             }
             hibernate.create(comment);
             fillTree();

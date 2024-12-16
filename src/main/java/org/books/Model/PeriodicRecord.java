@@ -20,23 +20,23 @@ public class PeriodicRecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @ManyToOne
-    private User user;
+    private User actionUser;
     @ManyToOne
     private Publication publication;
+    @ManyToOne
+    private User borrowerClient;
     private LocalDate transactionDate;
-    private LocalDate returnDate;
     private PublicationStatus status;
 
-    public PeriodicRecord(User user, Publication publication, LocalDate transactionDate, LocalDate returnDate, PublicationStatus status) {
-        this.user = user;
+    public PeriodicRecord(Publication publication, LocalDate transactionDate, User borrowerClient, PublicationStatus status) {
         this.publication = publication;
         this.transactionDate = transactionDate;
-        this.returnDate = returnDate;
+        this.borrowerClient = borrowerClient;
         this.status = status;
     }
 
     public PeriodicRecord(User user, Publication publication, LocalDate transactionDate, PublicationStatus status) {
-        this.user = user;
+        this.actionUser = user;
         this.status = status;
         this.publication = publication;
         this.transactionDate = transactionDate;

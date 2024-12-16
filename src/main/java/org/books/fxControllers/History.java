@@ -1,6 +1,10 @@
 package org.books.fxControllers;
 
 import jakarta.persistence.EntityManagerFactory;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -21,7 +25,7 @@ public class History implements Initializable {
     @FXML
     public TableColumn<PeriodicRecord, Integer> colId;
     @FXML
-    public TableColumn<PeriodicRecord, String> colReturnDate;
+    public TableColumn<PeriodicRecord, String> colBorrower;
     @FXML
     public TableColumn<PeriodicRecord, String> colStatus;
     @FXML
@@ -35,11 +39,13 @@ public class History implements Initializable {
     @FXML
     public DatePicker endDateField;
     @FXML
-    public ComboBox<PublicationStatus> PublicationStatusField;
+    public ComboBox<PublicationStatus> publicationStatusField;
     @FXML
-    public ComboBox<Client> clientField;
-    @FXML
-    public TextField publicationTitleField;
+    public ComboBox<Client> borrowerComboBox;
+
+    private final ObservableList<PeriodicRecord> tableData = FXCollections.observableArrayList();
+
+    private FilteredList<PeriodicRecord> filteredData;
 
     EntityManagerFactory entityManagerFactory;
     CustomHibernate hibernate;
@@ -47,12 +53,28 @@ public class History implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        filteredData = new FilteredList<>(tableData, p -> true);
+        publicationStatusField.getItems().add(null);
+        publicationStatusField.getItems().addAll(PublicationStatus.values());
+        //<editor-fold desc="For null entry">
+        publicationStatusField.setCellFactory(comboBox -> new ListCell<PublicationStatus>() {
+            @Override
+            protected void updateItem(PublicationStatus item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText("None");
+                } else {
+                    setText(item.toString());
+                }
+            }
+        });
+        //</editor-fold>
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
-        colReturnDate.setCellValueFactory(new PropertyValueFactory<>("returnDate"));
         colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
         colTransactionDate.setCellValueFactory(new PropertyValueFactory<>("transactionDate"));
         colPublication.setCellValueFactory(new PropertyValueFactory<>("publication"));
-        colClient.setCellValueFactory(new PropertyValueFactory<>("user"));
+        colClient.setCellValueFactory(new PropertyValueFactory<>("actionUser"));
+        colBorrower.setCellValueFactory(new PropertyValueFactory<>("borrowerClient"));
     }
 
     public void setData(EntityManagerFactory entityManagerFactory, User currentUser) {
@@ -67,6 +89,7 @@ public class History implements Initializable {
         this.hibernate = new CustomHibernate(entityManagerFactory);
         this.currentUser = currentUser;
         loadPublicationsById(id);
+        setupBorrowerCombobox();
     }
 
     private void loadAllRecords() {
@@ -76,11 +99,34 @@ public class History implements Initializable {
 
     private void loadPublicationsById(int id) {
         bookHistoryTable.getItems().clear();
-        bookHistoryTable.getItems().addAll(hibernate.getPeriodicById(id));
+        tableData.addAll(hibernate.getPeriodicById(id));
+        bookHistoryTable.getItems().addAll(tableData);
     }
 
     public void filterRecords() {
+        filteredData.setPredicate(record -> {
+            if (startDateField.getValue() != null && record.getTransactionDate().isBefore(startDateField.getValue())) {
+                return false;
+            }
+            if (endDateField.getValue() != null && record.getTransactionDate().isAfter(endDateField.getValue())) {
+                return false;
+            }
+            if (publicationStatusField.getValue() != null && !record.getStatus().equals(publicationStatusField.getValue())) {
+                return false;
+            }
+            if (borrowerComboBox.getValue() != null && !record.getBorrowerClient().equals(borrowerComboBox.getValue())) {
+                return false;
+            }
+            return true;
+        });
+        SortedList<PeriodicRecord> sortedData = new SortedList<>(filteredData);
+        sortedData.comparatorProperty().bind(bookHistoryTable.comparatorProperty());
+        bookHistoryTable.getItems().clear();
+        bookHistoryTable.getItems().addAll(sortedData);
     }
 
-
+    private void setupBorrowerCombobox() {
+        borrowerComboBox.getItems().clear();
+        borrowerComboBox.getItems().addAll(hibernate.getAllRecords(Client.class));
+    }
 }

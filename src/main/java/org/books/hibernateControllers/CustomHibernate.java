@@ -63,7 +63,7 @@ public class CustomHibernate extends GenericHibernate {
             CriteriaBuilder cb = entityManager.getCriteriaBuilder();
             CriteriaQuery<Publication> query = cb.createQuery(Publication.class);
             Root<Publication> root = query.from(Publication.class);
-            query.select(root).where(cb.and(cb.equal(root.get("publicationStatus"), PublicationStatus.BORROWED), cb.equal(root.get("owner"), user)));
+            query.select(root).where(cb.and(cb.equal(root.get("publicationStatus"), PublicationStatus.BORROWED), cb.equal(root.get("borrowerClient"), user)));
             Query q = entityManager.createQuery(query);
             publications = q.getResultList();
         } catch (Exception e) {

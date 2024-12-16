@@ -371,8 +371,9 @@ public class Main implements Initializable {
                         publication.setBorrowerClient(null);
                         publication.setPublicationStatus(PublicationStatus.AVAILABLE);
                         hibernate.update(publication);
+                        fillBorrowedBooksTable();
 
-                        insertPublicationRecord(publication);
+                        insertPublicationRecordBorrower(publication);
                     });
                 }
 
@@ -863,6 +864,11 @@ public class Main implements Initializable {
         hibernate.create(periodicRecord);
     }
 
+    private void insertPublicationRecordBorrower(Publication publication) {
+        PeriodicRecord periodicRecord = new PeriodicRecord(publication, LocalDate.now(), currentUser, publication.getPublicationStatus());
+        hibernate.create(periodicRecord);
+    }
+
     public void reserveBook() {
         Publication publication = availableBooksList.getSelectionModel().getSelectedItem();
         Publication publicationFromDb = hibernate.getEntityById(Publication.class, publication.getId());
@@ -870,7 +876,7 @@ public class Main implements Initializable {
         publicationFromDb.setBorrowerClient((Client) currentUser);
         hibernate.update(publicationFromDb);
 
-        PeriodicRecord periodicRecord = new PeriodicRecord((Client) currentUser, publicationFromDb, LocalDate.now(), PublicationStatus.REQUESTED);
+        PeriodicRecord periodicRecord = new PeriodicRecord(publicationFromDb, LocalDate.now(), currentUser, PublicationStatus.REQUESTED);
         hibernate.create(periodicRecord);
     }
 

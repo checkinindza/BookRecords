@@ -50,9 +50,9 @@ public class Comment {
         this.timestamp = LocalDateTime.now();
     }
 
-    public Comment(String commentBody, String title, Comment parentComment, Client commentOwner) {
-        this.commentBody = commentBody;
+    public Comment(String title, String commentBody, Comment parentComment, Client commentOwner) {
         this.title = title;
+        this.commentBody = commentBody;
         this.parentComment = parentComment;
         this.commentOwner = commentOwner;
         this.timestamp = LocalDateTime.now();
