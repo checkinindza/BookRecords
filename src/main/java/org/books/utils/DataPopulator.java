@@ -51,7 +51,8 @@ public class DataPopulator {
         comboBox.getItems().addAll(choices);
     }
 
-    public void fillComboBox(ComboBox comboBox, List<String> items) {
+    public <T> void fillComboBox(ComboBox<T> comboBox, List<T> items) {
+        FxUtils.setComboBoxCellFactory(comboBox);
         comboBox.getItems().addAll(items);
     }
 }

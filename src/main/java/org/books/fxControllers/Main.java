@@ -2,7 +2,10 @@ package org.books.fxControllers;
 
 //<editor-fold desc="import zone">
 import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -157,6 +160,8 @@ public class Main implements Initializable {
     @FXML
     public TableColumn<BookTableParameters, String> colBookTitle;
     @FXML
+    public TableColumn<BookTableParameters, Integer> colIdentificationNumber;
+    @FXML
     public TableColumn<BookTableParameters, String> colBookUser;
     @FXML
     public TableColumn colBookStatus;
@@ -166,10 +171,22 @@ public class Main implements Initializable {
     public TableColumn<BookTableParameters, Integer> colBookId;
     @FXML
     public TableColumn colBooksDummy;
+    private final ObservableList<BookTableParameters> clientBooksTableData = FXCollections.observableArrayList();
+    private FilteredList<BookTableParameters> clientBooksFilteredData;
     @FXML
     public ComboBox<String> userBooksPublicationTypeComboBox;
     @FXML
     public Label userTabTypeNotSelectedWarningLabel;
+    @FXML
+    public ComboBox<PublicationStatus> clientBookStatusComboBox;
+    @FXML
+    public TextField clientBookTitleTextField;
+    @FXML
+    public TextField clientBookIdentificationNumberTextField;
+    @FXML
+    public DatePicker clientBookStartDate;
+    @FXML
+    public DatePicker clientDateEndDate;
     //</editor-fold>
     //<editor-fold desc="Borrowed books table">
     @FXML
@@ -265,7 +282,9 @@ public class Main implements Initializable {
 
         //</editor-fold>
         //<editor-fold desc="My Books table initialize">
+        clientBooksFilteredData = new FilteredList<>(clientBooksTableData, p -> true);
         colBookId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        colIdentificationNumber.setCellValueFactory(new PropertyValueFactory<>("identificationNumber"));
         colBookTitle.setCellValueFactory(new PropertyValueFactory<>("publicationTitle"));
         colBookUser.setCellValueFactory(new PropertyValueFactory<>("publicationUser"));
         colRequestDate.setCellValueFactory(new PropertyValueFactory<>("publicationRequestDate"));
@@ -591,18 +610,27 @@ public class Main implements Initializable {
 
     private void fillBookList() {
         myBookList.getItems().clear();
+        clientBooksTableData.clear();
         List<Publication> allPublications = hibernate.getUserPublications(currentUser);
         for (Publication publication : allPublications) {
             BookTableParameters bookTableParameters = new BookTableParameters();
             bookTableParameters.setId(publication.getId());
+            if (publication instanceof Book) {
+                bookTableParameters.setIdentificationNumber(((Book) publication).getIsbn());
+            } else if (publication instanceof Manga) {
+                bookTableParameters.setIdentificationNumber(((Manga) publication).getJan());
+            } else if (publication instanceof Periodical) {
+                bookTableParameters.setIdentificationNumber(((Periodical) publication).getIssn());
+            }
             bookTableParameters.setPublicationTitle(publication.getTitle());
             if (publication.getBorrowerClient() != null) {
                 bookTableParameters.setPublicationUser(publication.getBorrowerClient().getName() + " " + publication.getBorrowerClient().getSurname());
             }
             bookTableParameters.setPublicationRequestDate(publication.getRequestDate());
             bookTableParameters.setPublicationStatus(publication.getPublicationStatus());
-            myBookList.getItems().add(bookTableParameters);
+            clientBooksTableData.add(bookTableParameters);
         }
+        myBookList.getItems().addAll(clientBooksTableData);
     }
 
     private void fillBorrowedBooksTable() {
@@ -831,6 +859,9 @@ public class Main implements Initializable {
         } else if (clientBookManagementTab.isSelected()) {
             fillBookList();
             fillBorrowedBooksTable();
+            clientBookStatusComboBox.getItems().clear();
+            FxUtils.setComboBoxCellFactory(clientBookStatusComboBox);
+            clientBookStatusComboBox.getItems().addAll(PublicationStatus.values());
         } else if (publicationManagementTab.isSelected()) {
             fillAdminPublicationsTablePerSelectedType();
         }
@@ -889,6 +920,31 @@ public class Main implements Initializable {
         } else {
             FxUtils.generateAlertWithoutHeader(Alert.AlertType.ERROR, "Error", "You cannot delete a book that is not available");
         }
+    }
+
+    public void filterClientBooks() {
+        clientBooksFilteredData.setPredicate(record -> {
+            if (!clientBookIdentificationNumberTextField.getText().isEmpty() && !String.valueOf(record.getIdentificationNumber()).startsWith(clientBookIdentificationNumberTextField.getText())) {
+                return false;
+            }
+            if (!clientBookTitleTextField.getText().isEmpty() && !record.getPublicationTitle().toLowerCase().contains(clientBookTitleTextField.getText().toLowerCase())) {
+                return false;
+            }
+            if (clientBookStatusComboBox.getValue() != null && record.getPublicationStatus() != clientBookStatusComboBox.getValue()) {
+                return false;
+            }
+            if (clientBookStartDate.getValue() != null && record.getPublicationRequestDate().isBefore(clientBookStartDate.getValue())) {
+                return false;
+            }
+            if (clientDateEndDate.getValue() != null && record.getPublicationRequestDate().isAfter(clientDateEndDate.getValue())) {
+                return false;
+            }
+            return true;
+        });
+        SortedList<BookTableParameters> sortedData = new SortedList<>(clientBooksFilteredData);
+        sortedData.comparatorProperty().bind(myBookList.comparatorProperty());
+        myBookList.getItems().clear();
+        myBookList.getItems().addAll(sortedData);
     }
     // END OF PUBLICATION TAB
 }

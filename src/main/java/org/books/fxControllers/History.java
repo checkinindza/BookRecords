@@ -14,6 +14,7 @@ import org.books.Model.PeriodicRecord;
 import org.books.Model.User;
 import org.books.Model.enums.PublicationStatus;
 import org.books.hibernateControllers.CustomHibernate;
+import org.books.utils.FxUtils;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -53,22 +54,8 @@ public class History implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        filteredData = new FilteredList<>(tableData, p -> true);
-        publicationStatusField.getItems().add(null);
+        FxUtils.setComboBoxCellFactory(publicationStatusField);
         publicationStatusField.getItems().addAll(PublicationStatus.values());
-        //<editor-fold desc="For null entry">
-        publicationStatusField.setCellFactory(comboBox -> new ListCell<PublicationStatus>() {
-            @Override
-            protected void updateItem(PublicationStatus item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText("None");
-                } else {
-                    setText(item.toString());
-                }
-            }
-        });
-        //</editor-fold>
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
         colTransactionDate.setCellValueFactory(new PropertyValueFactory<>("transactionDate"));
@@ -89,6 +76,7 @@ public class History implements Initializable {
         this.hibernate = new CustomHibernate(entityManagerFactory);
         this.currentUser = currentUser;
         loadPublicationsById(id);
+        filteredData = new FilteredList<>(tableData, p -> true);
         setupBorrowerCombobox();
     }
 
@@ -114,8 +102,11 @@ public class History implements Initializable {
             if (publicationStatusField.getValue() != null && !record.getStatus().equals(publicationStatusField.getValue())) {
                 return false;
             }
-            if (borrowerComboBox.getValue() != null && !record.getBorrowerClient().equals(borrowerComboBox.getValue())) {
-                return false;
+            if (borrowerComboBox.getValue() != null) {
+                if(record.getBorrowerClient() == null || record.getBorrowerClient().getId() != borrowerComboBox.getSelectionModel().getSelectedItem().getId()) {
+                    System.out.println(record.getBorrowerClient() + " " + borrowerComboBox.getValue());
+                    return false;
+                }
             }
             return true;
         });
@@ -127,6 +118,7 @@ public class History implements Initializable {
 
     private void setupBorrowerCombobox() {
         borrowerComboBox.getItems().clear();
+        FxUtils.setComboBoxCellFactory(borrowerComboBox);
         borrowerComboBox.getItems().addAll(hibernate.getAllRecords(Client.class));
     }
 }

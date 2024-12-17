@@ -4,15 +4,20 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import lombok.Getter;
+import lombok.Setter;
 import org.books.Model.enums.PublicationStatus;
 
 import java.time.LocalDate;
 
 public class BookTableParameters {
-    private SimpleIntegerProperty id = new SimpleIntegerProperty();
-    private SimpleStringProperty publicationTitle = new SimpleStringProperty();
-    private SimpleStringProperty publicationUser = new SimpleStringProperty();
-    private ObjectProperty<LocalDate> publicationRequestDate = new SimpleObjectProperty<>();
+    private final SimpleIntegerProperty id = new SimpleIntegerProperty();
+    private final SimpleIntegerProperty identificationNumber = new SimpleIntegerProperty();
+    private final SimpleStringProperty publicationTitle = new SimpleStringProperty();
+    private final SimpleStringProperty publicationUser = new SimpleStringProperty();
+    private final ObjectProperty<LocalDate> publicationRequestDate = new SimpleObjectProperty<>();
+    @Setter
+    @Getter
     private PublicationStatus publicationStatus;
 
     public int getId() {
@@ -25,6 +30,18 @@ public class BookTableParameters {
 
     public void setId(int id) {
         this.id.set(id);
+    }
+
+    public int getIdentificationNumber() {
+        return identificationNumber.get();
+    }
+
+    public SimpleIntegerProperty identificationNumberProperty() {
+        return identificationNumber;
+    }
+
+    public void setIdentificationNumber(int identificationNumber) {
+        this.identificationNumber.set(identificationNumber);
     }
 
     public String getPublicationTitle() {
@@ -61,13 +78,5 @@ public class BookTableParameters {
 
     public void setPublicationRequestDate(LocalDate publicationRequestDate) {
         this.publicationRequestDate.set(publicationRequestDate);
-    }
-
-    public PublicationStatus getPublicationStatus() {
-        return publicationStatus;
-    }
-
-    public void setPublicationStatus(PublicationStatus publicationStatus) {
-        this.publicationStatus = publicationStatus;
     }
 }

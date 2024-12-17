@@ -149,11 +149,12 @@
                         <TableView fx:id="myBookList" layoutY="46.0" prefHeight="247.0" prefWidth="1056.0">
                           <columns>
                             <TableColumn fx:id="colBookId" prefWidth="39.0" text="ID" />
-                            <TableColumn fx:id="colBookTitle" prefWidth="342.0" text="Title" />
-                              <TableColumn fx:id="colBookUser" prefWidth="205.0" text="Requested By" />
-                              <TableColumn fx:id="colBookStatus" prefWidth="115.0" text="Status" />
-                              <TableColumn fx:id="colRequestDate" prefWidth="250.0" text="Request Date" />
-                              <TableColumn fx:id="colBooksDummy" prefWidth="103.0" text="Action" />
+                              <TableColumn fx:id="colIdentificationNumber" prefWidth="144.0" text="Iden. Nr." />
+                            <TableColumn fx:id="colBookTitle" prefWidth="198.0" text="Title" />
+                              <TableColumn fx:id="colBookUser" prefWidth="165.0" text="Requested By" />
+                              <TableColumn fx:id="colBookStatus" prefWidth="213.0" text="Status" />
+                              <TableColumn fx:id="colRequestDate" prefWidth="158.0" text="Request Date" />
+                              <TableColumn fx:id="colBooksDummy" prefWidth="138.0" text="Action" />
                           </columns>
                         </TableView>
                         <Label layoutX="14.0" layoutY="11.0" text="My Books">
@@ -197,7 +198,7 @@
                         <Label layoutX="218.0" layoutY="304.0" text="Filter by title" />
                         <Label layoutX="412.0" layoutY="304.0" text="Filter by identification number" />
                         <Label layoutX="758.0" layoutY="304.0" text="Filter by request date" />
-                        <Button fx:id="filterClientBooks" layoutX="438.0" layoutY="368.0" mnemonicParsing="false" prefHeight="24.0" prefWidth="180.0" text="Filter" />
+                        <Button layoutX="438.0" layoutY="368.0" mnemonicParsing="false" onAction="#filterClientBooks" prefHeight="24.0" prefWidth="180.0" text="Filter" />
                      </children></AnchorPane>
               </content>
             </Tab>
