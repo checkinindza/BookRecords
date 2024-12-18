@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="org.books.fxControllers.Register"
-            prefHeight="400.0" prefWidth="600.0">
 
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.books.fxControllers.Register">
+   <children>
+      <TextField fx:id="loginField" layoutX="218.0" layoutY="117.0" />
+      <PasswordField fx:id="passwordField" layoutX="218.0" layoutY="200.0" />
+      <TextField fx:id="emailField" layoutX="218.0" layoutY="158.0" />
+      <Button layoutX="190.0" layoutY="257.0" mnemonicParsing="false" onAction="#createClient" text="Register" />
+      <Button layoutX="354.0" layoutY="257.0" mnemonicParsing="false" onAction="#closeWindow" text="Cancel" />
+   </children>
 </AnchorPane>

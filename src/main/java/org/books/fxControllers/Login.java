@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.books.Model.User;
 import org.books.StartGUI;
@@ -27,7 +28,16 @@ public class Login {
     public PasswordField pswField;
 
     public void openRegisterWindow() throws IOException {
-        StartGUI.changeScene("/org.books/register.fxml");
+        FXMLLoader fxmlLoader = new FXMLLoader(StartGUI.class.getResource("/org.books/register.fxml"));
+        Parent parent = fxmlLoader.load();
+        Register register = fxmlLoader.getController();
+        register.setData(entityManagerFactory);
+        Scene scene = new Scene(parent);
+        Stage stage = (Stage) loginField.getScene().getWindow();
+        stage.setTitle("Register");
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(scene);
+        stage.showAndWait();
     }
 
     public void validateUser() throws IOException {

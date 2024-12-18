@@ -63,7 +63,7 @@ public class CustomHibernate extends GenericHibernate {
             CriteriaBuilder cb = entityManager.getCriteriaBuilder();
             CriteriaQuery<Publication> query = cb.createQuery(Publication.class);
             Root<Publication> root = query.from(Publication.class);
-            query.select(root).where(cb.and(cb.equal(root.get("publicationStatus"), PublicationStatus.BORROWED), cb.equal(root.get("borrowerClient"), user)));
+            query.select(root).where(cb.and(cb.equal(root.get("publicationStatus"), PublicationStatus.BORROWED), cb.equal(root.get("borrowerClientList"), user)));
             Query q = entityManager.createQuery(query);
             publications = q.getResultList();
         } catch (Exception e) {
@@ -181,6 +181,7 @@ public class CustomHibernate extends GenericHibernate {
             entityManager.getTransaction().begin();
             Publication publication = entityManager.find(Publication.class, id);
             Client client;
+            Client borrower;
             if (publication != null) {
                 if (publication.getOwner() != null) {
                     client = publication.getOwner();
@@ -188,9 +189,15 @@ public class CustomHibernate extends GenericHibernate {
                     client.getOwnedPublications().remove(publication);
                     entityManager.merge(client);
                 }
+              /*  if (publication.getBorrowerClientList() != null) {
+                    borrower = publication.getBorrowerClientList();
+                    publication.setBorrowerClientList(null);
+                    borrower.getBorrowedPublications().remove(publication);
+                    entityManager.merge(borrower);
+                }*/
                 if (publication.getRecords() != null) {
-                    for (PeriodicRecord record : publication.getRecords()) {
-                        entityManager.remove(record);
+                   for (PeriodicRecord record : publication.getRecords()) {
+                       entityManager.remove(record);
                     }
                     publication.getRecords().clear();
                 }

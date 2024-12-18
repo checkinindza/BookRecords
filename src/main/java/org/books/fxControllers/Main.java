@@ -387,7 +387,7 @@ public class Main implements Initializable {
                     returnButton.setOnAction(event -> {
                         BorrowedBooksTableParameters row = getTableView().getItems().get(getIndex());
                         Publication publication = hibernate.getEntityById(Publication.class, row.getId());
-                        publication.setBorrowerClient(null);
+                        publication.setBorrowerClientList(null);
                         publication.setPublicationStatus(PublicationStatus.AVAILABLE);
                         hibernate.update(publication);
                         fillBorrowedBooksTable();
@@ -623,8 +623,8 @@ public class Main implements Initializable {
                 bookTableParameters.setIdentificationNumber(((Periodical) publication).getIssn());
             }
             bookTableParameters.setPublicationTitle(publication.getTitle());
-            if (publication.getBorrowerClient() != null) {
-                bookTableParameters.setPublicationUser(publication.getBorrowerClient().getName() + " " + publication.getBorrowerClient().getSurname());
+            if (publication.getBorrowerClientList() != null) {
+                bookTableParameters.setPublicationUser(publication.getBorrowerClientList().getName() + " " + publication.getBorrowerClientList().getSurname());
             }
             bookTableParameters.setPublicationRequestDate(publication.getRequestDate());
             bookTableParameters.setPublicationStatus(publication.getPublicationStatus());
@@ -653,7 +653,7 @@ public class Main implements Initializable {
             adminPublicationsTableParameters.setTitle(publication.getTitle());
             adminPublicationsTableParameters.setPublicationStatus(publication.getPublicationStatus());
             if (publication.getOwner() != null) adminPublicationsTableParameters.setPublicationOwner(publication.getOwner().getName() + " " + publication.getOwner().getSurname());
-            if (publication.getBorrowerClient() != null) adminPublicationsTableParameters.setPublicationBorrower(publication.getBorrowerClient().getName() + " " + publication.getBorrowerClient().getSurname());
+            if (publication.getBorrowerClientList() != null) adminPublicationsTableParameters.setPublicationBorrower(publication.getBorrowerClientList().getName() + " " + publication.getBorrowerClientList().getSurname());
             adminPublicationsTable.getItems().add(adminPublicationsTableParameters);
         }
     }
@@ -904,7 +904,7 @@ public class Main implements Initializable {
         Publication publication = availableBooksList.getSelectionModel().getSelectedItem();
         Publication publicationFromDb = hibernate.getEntityById(Publication.class, publication.getId());
         publicationFromDb.setPublicationStatus(PublicationStatus.REQUESTED);
-        publicationFromDb.setBorrowerClient((Client) currentUser);
+        publicationFromDb.setBorrowerClientList((Client) currentUser);
         hibernate.update(publicationFromDb);
 
         PeriodicRecord periodicRecord = new PeriodicRecord(publicationFromDb, LocalDate.now(), currentUser, PublicationStatus.REQUESTED);

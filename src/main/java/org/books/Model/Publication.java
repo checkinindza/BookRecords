@@ -28,7 +28,7 @@ public abstract class Publication {
     @ManyToOne
     protected Client owner;
     @ManyToOne
-    protected Client borrowerClient;
+    protected Client borrowerClientList;
     protected String publisher;
     protected String author;
     protected String summary;

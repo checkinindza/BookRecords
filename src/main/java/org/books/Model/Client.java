@@ -23,7 +23,7 @@ public class Client extends User {
     private List<Comment> commentList;
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL , fetch = FetchType.EAGER, orphanRemoval = true)
     private List<Publication> ownedPublications;
-    @OneToMany(mappedBy = "borrowerClient", cascade = CascadeType.ALL , fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "borrowerClientList", cascade = CascadeType.ALL , fetch = FetchType.EAGER, orphanRemoval = true)
     private List<Publication> borrowedPublications;
     @OneToMany(mappedBy = "commentOwner", cascade = CascadeType.ALL , fetch = FetchType.EAGER, orphanRemoval = true)
     private List<Comment> myComments;
@@ -41,5 +41,9 @@ public class Client extends User {
         super(login, password, name, surname, email);
         this.address = address;
         this.birthDate = birthDate;
+    }
+
+    public Client(String login, String password, String name, String surname, String email) {
+        super(login, password, name, surname, email);
     }
 }
